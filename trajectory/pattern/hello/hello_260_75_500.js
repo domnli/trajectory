@@ -4,4 +4,14 @@ define(function(require,exports,module){
 	exports.width = 260;
 	exports.height = 75;
 	exports.coors = coors;
+	exports.setOffset = function(x,y){
+	 	if(!isNaN(x)){
+	 		var i = 0, dest;
+	 		y = isNaN(y) ? 0 : y;
+	 		for(var i = 0;i<coors.length;i++){
+	 			dest = coors[i];
+	 			coors[i] = {x:dest.x+x,y:dest.y+y};
+	 		}
+	 	}
+	 }
 });

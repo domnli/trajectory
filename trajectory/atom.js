@@ -48,6 +48,7 @@ define(function(require,exports,module){
 			this.attr[p] = v;
 			if(p == "dest"){
 				this.standstill = false;
+				this.distance = undefined;
 			}
 		}
 	}
@@ -69,7 +70,7 @@ define(function(require,exports,module){
 			vel = this.attr.vel,
 			distance,tx,ty;
 
-		distance = Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
+		distance = this.distance||Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
 		if(distance == 0){
 			this.standstill = true;
 			return;

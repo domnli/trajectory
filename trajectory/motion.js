@@ -19,7 +19,7 @@ define(function(require,exports,module){
 		this.canvas = conf.canvas||(function(){throw "必须含有配置项canvas"})();
 		this.ctx = conf.ctx||conf.canvas.getContext("2d");
 	}
-	// 继承事件机制
+
 	Emitter(Motion.prototype);
 
 	module.exports = Motion;
@@ -38,6 +38,7 @@ define(function(require,exports,module){
 			}
 		}
 	}
+	
 	/**
 		把atom随机放到指定区域，默认为整个画布
 	*/
