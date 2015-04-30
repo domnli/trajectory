@@ -1,0 +1,65 @@
+<html>
+<head></head>
+<body>
+	<!--<div style="position: absolute;top:0;left:0;z-index:-1"><img src="webwxgetmsgimg.jpg"/></div>-->
+</body>
+<script type="text/javascript">
+	function createCanvas(width,height){
+		var canvas = document.createElement('canvas');
+
+		canvas.width = width,
+		canvas.height  = height;
+		canvas.oncontextmenu = function(){return false;}
+		document.body.style.margin=0;
+	    document.body.style.padding=0;
+	    document.body.style.textAlign = 'center';
+	    
+		document.body.appendChild(canvas);
+		return canvas;
+	}
+
+	function drawSolidCircle(ctx,x,y,r,fillStyle){
+		ctx.beginPath();
+		ctx.arc(x,y,r,0,2*Math.PI);
+		ctx.fillStyle = fillStyle;
+		ctx.fill();
+	}
+
+	function random(min,max){
+		return Math.floor(Math.random()*(max - min)) + min;
+	}
+
+	function mouseEvent(e){
+		if(e.button == 0) {
+			drawSolidCircle(ctx,e.x,e.y,1,'gray');
+			atoms.push({x:e.x,y:e.y});
+		}else{
+			atoms.pop();
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+			for(var i=0;i<atoms.length;i++){
+				drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1,'gray');
+			}
+		}
+	}
+
+	var canvas = createCanvas(window.innerWidth,window.innerHeight),
+		ctx = canvas.getContext("2d"),
+		atoms = [];
+	// canvas.onmousedown = mouseEvent;
+	// var imgData = ctx.getImageData(100,100,1,1);
+	// console.log(imgData.data);
+	// imgData.data[3] = 255;
+	// console.log(imgData.data);
+	// ctx.putImageData(imgData,100,100);
+
+	// ctx.beginPath();
+	// ctx.arc(110,110,1,0,2*Math.PI);
+	// ctx.fill();
+	var i=0,imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+	for(;i<imgData.data.length;i+=4000){
+		imgData.data[i+3] = 255;
+	}
+	ctx.putImageData(imgData,0,0);
+	
+</script>
+</html>

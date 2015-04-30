@@ -1,0 +1,94 @@
+<html>
+<head></head>
+<body>
+	<!--<div style="position: absolute;top:0;left:0;z-index:-1"><img src="webwxgetmsgimg.jpg"/></div>-->
+</body>
+<script type="text/javascript">
+	function createCanvas(width,height){
+		var canvas = document.createElement('canvas');
+
+		canvas.width = width,
+		canvas.height  = height;
+		canvas.oncontextmenu = function(){return false;}
+		document.body.style.margin=0;
+	    document.body.style.padding=0;
+	    document.body.style.textAlign = 'center';
+	    
+		document.body.appendChild(canvas);
+		return canvas;
+	}
+
+	function drawSolidCircle(ctx,x,y,r,fillStyle){
+		ctx.beginPath();
+		ctx.arc(x,y,r,0,2*Math.PI);
+		ctx.fillStyle = fillStyle;
+		ctx.fill();
+	}
+
+	function random(min,max){
+		return Math.floor(Math.random()*(max - min)) + min;
+	}
+
+	function mouseEvent(e){
+		if(e.button == 0) {
+			drawSolidCircle(ctx,e.x,e.y,1,'gray');
+			atoms.push({x:e.x,y:e.y});
+		}else{
+			atoms.pop();
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+			for(var i=0;i<atoms.length;i++){
+				drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1,'gray');
+			}
+		}
+	}
+
+	var canvas = createCanvas(window.innerWidth,window.innerHeight),
+		ctx = canvas.getContext("2d"),
+		fullAtoms = [];
+		atoms = [];
+	// canvas.onmousedown = mouseEvent;
+
+	var img = new Image(),
+		imgWidth = 576,
+		imgHeight = 80;
+		img.src = "loveyouJp.png";
+	img.onload = function(){
+		ctx.drawImage(img,0,0);
+		var imgData = ctx.getImageData(0,0,imgWidth,imgHeight);
+		var d = imgData.data;
+		for(var i = 0;i<d.length;i+=4){
+			var total = d.length/4,
+				x,y;
+			if(d[i] < 120 && d[i+1] < 120 && d[i+2] < 120){
+				x = (i/4+1)%imgWidth;
+				y = Math.floor((i/4 - x)/imgWidth);
+				// y = Math.floor((i/4+1)/75);
+				fullAtoms.push({x:x,y:y});
+			}
+		}
+		 ctx.clearRect(0,0,canvas.width,canvas.height);
+		// ctx.putImageData(imgData,0,0);
+		var start,end,rads = [];
+		start = new Date().getTime();
+		while(atoms.length < 999){
+			var rad = random(0,fullAtoms.length);
+			if(rads.indexOf(rad) == -1){
+				atoms.push(fullAtoms[rad]);
+				rads.push(rad);
+			}
+		}
+		end = new Date().getTime();
+		console.log((end - start)/1000);
+		// document.write(JSON.stringify(atoms));
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		
+		start = new Date().getTime();
+		for(var i=0;i<atoms.length;i++){
+			drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1);
+		}
+		end = new Date().getTime();
+		console.log((end - start)/1000);
+	}
+	
+</script>
+</html>
