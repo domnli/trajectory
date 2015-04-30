@@ -34,12 +34,12 @@
 				};
 
 				function addAtom(){
-					rate++;
-					if(rate < 3){return;}
+					// rate++;
+					// if(rate < 3){return;}
 					if(i < shape.coors.length && mousedown){
 						motion.atoms.push(new Atom({x:mouseCoor.x,y:mouseCoor.y,dest:shape.coors[i]}));
 						i++;
-						rate = 0;
+						// rate = 0;
 					}
 				}
 
