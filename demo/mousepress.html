@@ -4,23 +4,23 @@
 		<meta charset="utf-8">
 		<title>mouse press</title>
 	</head>
-	<script type="text/javascript" src="trajectory/lib/sea.js"></script>
+	<script type="text/javascript" src="../sea.js"></script>
 	<script type="text/javascript">
-		// seajs.config({
-		// 	paths:{
-		// 		"trajectory":"../../trajectory"
-		// 	}
-		// });
+		seajs.config({
+			paths:{
+				"trajectory":"./trajectory"
+			}
+		});
 		seajs.use([ "trajectory/atom",
 					"trajectory/motion",
 					"trajectory/util/cpi",
 					"trajectory/util/looper",
-					"trajectory/pattern/hello/hello_260_75_500"
+					"trajectory/pattern/qr/qr_430_14000"
 					],
 			function(Atom,Motion,cpi,looper,shape){
 				var canvas = cpi.createCanvasFullScreen(),
 					motion = new Motion({canvas:canvas}),
-					i=0,mousedown=false,mouseCoor;
+					i=0,mousedown=false,mouseCoor,rate=0;
 				shape.setOffset(canvas.width/2-shape.width/2,canvas.height/2-shape.height/2);
 				canvas.onmousedown=function(e){
 					mouseCoor = {x:e.x,y:e.y};
@@ -32,10 +32,14 @@
 				canvas.onmouseup=function(){
 					mousedown = false;
 				};
+
 				function addAtom(){
+					rate++;
+					if(rate < 3){return;}
 					if(i < shape.coors.length && mousedown){
 						motion.atoms.push(new Atom({x:mouseCoor.x,y:mouseCoor.y,dest:shape.coors[i]}));
 						i++;
+						rate = 0;
 					}
 				}
 
