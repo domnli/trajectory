@@ -15,33 +15,35 @@
 					"trajectory/motion",
 					"trajectory/util/cpi",
 					"trajectory/util/looper",
-					"trajectory/pattern/qr/qr_430_14000"
+					"trajectory/util/random"
 					],
-			function(Atom,Motion,cpi,looper,shape){
+			function(Atom,Motion,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
 					motion = new Motion({canvas:canvas}),
-					i=0,mousedown=false,mouseCoor,rate=0;
-				shape.setOffset(canvas.width/2-shape.width/2,canvas.height/2-shape.height/2);
-				canvas.onmousedown=function(e){
-					mouseCoor = {x:e.x,y:e.y};
-					mousedown = true;
-				};
+					i=0,atoms = [];
+					console.log(canvas);
+				for(;i<2000;i++){
+					var atom = new Atom({x:random(0,canvas.width),y:random(0,canvas.height)});
+					atoms.push(atom);
+				}
+				motion.setAtoms(atoms);
+
 				canvas.onmousemove=function(e){
-					mouseCoor = {x:e.x,y:e.y};
+					motion.emit('mouseover',e.x,e.y);
 				};
-				canvas.onmouseup=function(){
-					mousedown = false;
+				canvas.onmousedown = function(e){
+					motion.randomCoors();
 				};
 
-				function addAtom(){
-					if(i < shape.coors.length && mousedown){
-						motion.atoms.push(new Atom({x:mouseCoor.x,y:mouseCoor.y,dest:shape.coors[i],vel:30}));
-						i++;
+				motion.on('mouseover',function(x,y){
+					var atoms = this.getAtoms();
+					for(var i = 0;i<atoms.length;i++){
+						atoms[i].set('vel',random(1,100));
+						atoms[i].set("dest",{x:x,y:y});
 					}
-				}
+				});
 
 				looper.add([
-					addAtom,
 					function(){
 						motion.ctx.clearRect(0,0,canvas.width,canvas.height);
 					},function(){
