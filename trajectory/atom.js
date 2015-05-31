@@ -4,17 +4,20 @@
 		y:1,
 		dest:{x:5,y:5}, 终点坐标
 		vel:0.5, 速度
-		moveStyle:'',
+		moveStyle:'', shake
 		color:'',
 		colorStyle:''
 	}
 */
 define(function(require,exports,module){
+	var Emitter = require("./util/emitter");
 
 	function Atom(config){
 		checkingConfig(config);
 		this._init(config);
 	}
+
+	Emitter(Atom.prototype);
 
 	function checkingConfig(config){
 		var  e = "没有配置项"
@@ -48,7 +51,6 @@ define(function(require,exports,module){
 			this.attr[p] = v;
 			if(p == "dest"){
 				this.standstill = false;
-				this.distance = undefined;
 			}
 		}
 	}
@@ -70,7 +72,7 @@ define(function(require,exports,module){
 			vel = this.attr.vel,
 			distance,tx,ty;
 
-		distance = this.distance||Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
+		distance = Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
 		if(distance == 0){
 			this.standstill = true;
 			return;
