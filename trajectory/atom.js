@@ -5,8 +5,7 @@
 		dest:{x:5,y:5}, 终点坐标
 		vel:0.5, 速度
 		moveStyle:'', shake
-		color:'',
-		colorStyle:''
+		rgba:'', rgba(0,0,0,1)
 	}
 */
 define(function(require,exports,module){

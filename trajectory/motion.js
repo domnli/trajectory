@@ -33,7 +33,7 @@ define(function(require,exports,module){
 				if(atomsORcoors[i] instanceof Atom){
 					this.atoms.push(atomsORcoors[i]);
 				}else{
-					this.atoms.push(new Atom({x:atomsORcoors[i].x,y:atomsORcoors[i].y}));
+					this.atoms.push(new Atom({x:atomsORcoors[i].x,y:atomsORcoors[i].y,rgba:atomsORcoors[i].rgba}));
 				}
 			}
 		}
@@ -65,7 +65,7 @@ define(function(require,exports,module){
 				atom.move();
 				allStandstill = false;
 			}
-			cpi.drawSolidCircle(this.ctx,atom.get("x"),atom.get("y"),1);
+			cpi.drawSolidCircle(this.ctx,atom.get("x"),atom.get("y"),1,atom.get('rgba'));
 		}
 		if(allStandstill){
 			this.emit("standstill");
