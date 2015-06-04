@@ -45,7 +45,7 @@ define(function(require,exports,module){
 	}
 	
 	/**
-		把atom随机放到指定区域，默认为整个画布
+		把atom随机放到指定区域,默认为整个画布
 	*/
 	Motion.prototype.randomCoors = function(x,y,width,height){
 		x = x||0;
