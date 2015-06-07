@@ -5,5 +5,10 @@ define(function(require,exports,module){
 	var cpi = require('./cpi'),
 		random = require('./random');
 
+	function createConfigDialog(){
+
+	}
 	
+	var canvas = cpi.createCanvasFullScreen();
+
 });
