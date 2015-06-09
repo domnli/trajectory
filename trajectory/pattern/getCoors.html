@@ -1,8 +1,8 @@
 <html>
 <head>
-	<script type="text/javascript" src="/static/lib/sea.js"></script>
+	<script type="text/javascript" src="../../lib/sea.js"></script>
 	<script type="text/javascript">
-		seajs.use();
+		seajs.use('../util/image2atom');
 	</script>
 </head>
 <body>
@@ -91,34 +91,34 @@
 		console.log((end - start)/1000);
 	}
 
-	var canvas = createCanvas(window.innerWidth,window.innerHeight),
-		ctx = canvas.getContext("2d"),
-		fullAtoms = [];
-		atoms = [];
-	// 添加鼠标事件
-	// canvas.onmousedown = mouseEvent;
+	// var canvas = createCanvas(window.innerWidth,window.innerHeight),
+	// 	ctx = canvas.getContext("2d"),
+	// 	fullAtoms = [];
+	// 	atoms = [];
+	// // 添加鼠标事件
+	// // canvas.onmousedown = mouseEvent;
 
-	var img = new Image();
-	img.src = "face.png";
-	img.onload = function(){
-		ctx.drawImage(img,0,0);
-		var width = img.width,height=img.height,
-			imgData = ctx.getImageData(0,0,img.width,img.height);
-		fullAtoms = collectAtomsWithRGBA(imgData.data,width);
-		// 打乱排列顺序,随机抽取atom
-		upsetAtomsSequence(fullAtoms,atoms,30000);
-		// atoms = fullAtoms;
+	// var img = new Image();
+	// img.src = "face.png";
+	// img.onload = function(){
+	// 	ctx.drawImage(img,0,0);
+	// 	var width = img.width,height=img.height,
+	// 		imgData = ctx.getImageData(0,0,img.width,img.height);
+	// 	fullAtoms = collectAtomsWithRGBA(imgData.data,width);
+	// 	// 打乱排列顺序,随机抽取atom
+	// 	upsetAtomsSequence(fullAtoms,atoms,30000);
+	// 	// atoms = fullAtoms;
 
-		ctx.clearRect(0,0,canvas.width,canvas.height);
+	// 	ctx.clearRect(0,0,canvas.width,canvas.height);
 
-		var start,end;
-		start = new Date().getTime();
-		for(var i=0;i<atoms.length;i++){
-			drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1,atoms[i].rgba);
-		}
-		end = new Date().getTime();
-		console.log((end - start)/1000);
-	}
+	// 	var start,end;
+	// 	start = new Date().getTime();
+	// 	for(var i=0;i<atoms.length;i++){
+	// 		drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1,atoms[i].rgba);
+	// 	}
+	// 	end = new Date().getTime();
+	// 	console.log((end - start)/1000);
+	// }
 	
 </script>
 </html>
