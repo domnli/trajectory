@@ -2,7 +2,7 @@
 	atom.attr = {
 		x:1,
 		y:1,
-		dest:{x:5,y:5}, 终点坐标
+		destination:{x:5,y:5}, 终点坐标
 		vel:0.5, 速度
 		moveStyle:'', shake
 		rgba:'', rgba(0,0,0,1)
@@ -11,82 +11,65 @@
 define(function(require,exports,module){
 	var Emitter = require("./util/emitter");
 
-	function Atom(config){
-		checkingConfig(config);
-		this._init(config);
+	function Atom(options){
+		this._init(options);
 	}
 
 	Emitter(Atom.prototype);
 
-	function checkingConfig(config){
-		var  e = "没有配置项"
-		if(config == undefined){
-			throw e;
-		}
-		if(config['x'] == undefined || config['y'] == undefined){
-			throw e+"x or y";
-		}
-	}
+	Atom.prototype._init = function(options){
+		this._attr = options;
 
-	Atom.prototype._init = function(config){
-		this.attr = config;
-
-		if(this.attr.dest == undefined){
-			this.attr.dest = {x:this.attr.x,y:this.attr.y};
-		}
-		if(this.attr.vel == undefined){
-			this.attr.vel = 1;
-		}
+		this._attr.x = options.x||0;
+		this._attr.y = options.y||0;
+		this._attr.destination = options.destination||{x:this.get('x'),y:this.get('y')};
+		this._attr.vel = options.vel||1;
+		
+		this.on('destinationAlter',function(){
+			this.rest = false;
+		});
 	}
 
 	Atom.prototype.get = function(p){
-		if(this.attr[p] != undefined){
-			return this.attr[p];
-		}
+		return this._attr[p];
 	}
 
 	Atom.prototype.set = function(p,v){
-		if(this.attr[p] != undefined){
-			this.attr[p] = v;
-			if(p == "dest"){
-				this.standstill = false;
-			}
-		}
+		this._attr[p] = v;
+		this.emit(p+"Alter");
 	}
 
 	Atom.prototype.move = function(x,y){
 		if(x != undefined && y != undefined){
-			this.attr.x = x;
-			this.attr.y = y;
+			this._attr.x = x;
+			this._attr.y = y;
 			return ;
 		}
-		if(this.standstill){
-			return;
-		}
-		var px = this.attr.x,
-			py = this.attr.y,
-			dest = this.attr.dest,
+		if(this.rest){return;}
+		var px = this.get('x'),
+			py = this.get('y'),
+			dest = this.get('destination'),
 			dx = dest.x - px,
 			dy = dest.y - py,
-			vel = this.attr.vel,
+			vel = this.get('vel'),
 			distance,tx,ty;
 
 		distance = Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
 		if(distance == 0){
-			this.standstill = true;
+			this.rest = true;
 			return;
 		}
 		tx = dx*vel/distance,
 		ty = dy*vel/distance;
 		if(Math.abs(tx) >= Math.abs(dx)){
-			this.attr.x = dest.x;
+			this._attr.x = dest.x;
 		}else{
-			this.attr.x += tx;
+			this._attr.x += tx;
 		}
 		if(Math.abs(ty) >= Math.abs(dy)){
-			this.attr.y = dest.y;
+			this._attr.y = dest.y;
 		}else{
-			this.attr.y += ty;
+			this._attr.y += ty;
 		}
 	}
 

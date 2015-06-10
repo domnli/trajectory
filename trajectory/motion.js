@@ -63,17 +63,17 @@ define(function(require,exports,module){
 		下一帧
 	*/
 	Motion.prototype.next = function(){
-		var i = 0,atom,allStandstill = true;
+		var i = 0,atom,rest = true;
 		for(;i<this.atoms.length;i++){
 			atom = this.atoms[i];
-			if(!atom.standstill){
+			if(!atom.rest){
 				atom.move();
-				allStandstill = false;
+				rest = false;
 			}
 			cpi.drawSolidCircle(this.ctx,atom.get("x"),atom.get("y"),1,atom.get('rgba'));
 		}
-		if(allStandstill){
-			this.emit("standstill");
+		if(rest){
+			this.emit("rest");
 		}
 	}
 
@@ -103,8 +103,8 @@ define(function(require,exports,module){
 	 		var i = 0, dest;
 	 		y = isNaN(y) ? 0 : y;
 	 		for(var i = 0;i<this.atoms.length;i++){
-	 			dest = this.atoms[i].get("dest");
-	 			this.atoms[i].set("dest",{x:dest.x+x,y:dest.y+y});
+	 			dest = this.atoms[i].get("destination");
+	 			this.atoms[i].set("destination",{x:dest.x+x,y:dest.y+y});
 	 		}
 	 	}
 	 }
@@ -119,7 +119,7 @@ define(function(require,exports,module){
 	 			if(coors[i] == undefined){
 	 				break;
 	 			}
-	 			this.atoms[i].set("dest",coors[i]);
+	 			this.atoms[i].set("destination",coors[i]);
 	 		}
 	 		if(i<this.atoms.length-1){
 	 			this.atoms.splice(i);
