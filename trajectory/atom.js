@@ -39,13 +39,10 @@ define(function(require,exports,module){
 		this.emit(p+"Alter");
 	}
 
-	Atom.prototype.move = function(x,y){
-		if(x != undefined && y != undefined){
-			this._attr.x = x;
-			this._attr.y = y;
-			return ;
+	Atom.prototype.move = function(){
+		if(this.rest){
+			return;
 		}
-		if(this.rest){return;}
 		var px = this.get('x'),
 			py = this.get('y'),
 			dest = this.get('destination'),
@@ -71,6 +68,11 @@ define(function(require,exports,module){
 		}else{
 			this._attr.y += ty;
 		}
+	}
+
+	Atom.prototype.moveTo = function(x,y){
+		isNaN(x)?undefined:this.set('x',x);
+		isNaN(y)?undefined:this.set('y',y);
 	}
 
 	module.exports =  Atom;

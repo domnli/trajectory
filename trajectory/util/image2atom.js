@@ -6,8 +6,8 @@ define(function(require,exports,module){
 		random = require('./random');
 
 	function createConfigDialog(){
-		var tpl = '<div style=""><span style="display:block"></span><input type="range" class="" /></div>'
-				+ '<div style=""><span style="display:block"></span><input type="checkbox" class="" /></div>';
+		var tpl = '<div style=""><span style="display:block">覆盖率</span><input type="range" class="" /></div>'
+				+ '<div style=""><span style="display:block">乱序</span><input type="checkbox" class="" /></div>';
 		var dialog = document.createElement('div');
 		dialog.style.cssText = "position: absolute; z-index:300; right:0; top:0; margin:50px; font-size:12px";
 		dialog.innerHTML = tpl;
