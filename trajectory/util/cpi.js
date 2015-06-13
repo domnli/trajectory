@@ -6,7 +6,7 @@ define(function(require,exports,module){
 		创建全屏canvas
 	*/
 	function createCanvasFullScreen(){
-		return createCanvas(window.innerWidth,window.innerHeight);
+		return createCanvas(window.innerWidth,window.innerHeight-5);
 	}
 
 	/**
@@ -14,12 +14,15 @@ define(function(require,exports,module){
 	*/
 	function createCanvas(width,height){
 		var canvas = document.createElement('canvas');
-
+		canvas.style.margin =
+		canvas.style.padding = 
+		canvas.style.border =0;
 		canvas.width = width,
 		canvas.height  = height;
 
-		document.body.style.margin=0;
-	    document.body.style.padding=0;
+		document.body.style.margin =
+	    document.body.style.padding =
+	    document.body.style.border = 0;
 	    document.body.style.textAlign = 'center';
 	    
 		document.body.appendChild(canvas);

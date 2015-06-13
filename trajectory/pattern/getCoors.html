@@ -4,33 +4,16 @@
 	<script type="text/javascript" src="../../lib/sea.js"></script>
 	<script type="text/javascript">
 		seajs.config();
-		seajs.use('../util/image2atom');
+		seajs.use('../util/image2atom',function(tool){
+			console.log(tool);
+			tool.setImgSrc("pic.jpg");
+		});
 	</script>
 </head>
-<body>
-	<!--<div style="position: absolute;top:0;left:0;z-index:-1"><img src="webwxgetmsgimg.jpg"/></div>-->
+<body style="margin:0;padding:0">
+	<div style="width:100%;height:100%"></div>
 </body>
 <script type="text/javascript">
-	function createCanvas(width,height){
-		var canvas = document.createElement('canvas');
-
-		canvas.width = width,
-		canvas.height  = height;
-		canvas.oncontextmenu = function(){return false;}
-		document.body.style.margin=0;
-	    document.body.style.padding=0;
-	    document.body.style.textAlign = 'center';
-	    
-		document.body.appendChild(canvas);
-		return canvas;
-	}
-
-	function drawSolidCircle(ctx,x,y,r,fillStyle){
-		ctx.beginPath();
-		ctx.arc(x,y,r,0,2*Math.PI);
-		ctx.fillStyle = fillStyle;
-		ctx.fill();
-	}
 
 	function random(min,max){
 		return Math.floor(Math.random()*(max - min)) + min;
