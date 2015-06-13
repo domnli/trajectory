@@ -9,7 +9,7 @@ define(function(require,exports,module){
 		ctx = canvas.getContext('2d'),
 		img = new Image();
 
-	var imageInfo,allAtoms;
+	var imageInfo,allAtoms,atoms;
 
 	img.onload = function(){
 		ctx.drawImage(img,0,0);
@@ -19,14 +19,10 @@ define(function(require,exports,module){
 	};
 
 
-
-	$('#configPanl .item').on('change',function(){
-		console.log(getConfig());
-	});
-
 	(function(){
-		var tpl = '<div style=""><span style="display:block">抽取率</span><input type="range" class="item extract" /></div>'
-				+ '<div style=""><span style="display:block">乱序</span><input type="checkbox" class="item disorder" /></div>';
+		var tpl = '<div style=""><span style="display:block">抽取率</span><input type="range" min=1 max=100 class="item rate" /></div>'
+				+ '<div style=""><span style="display:block">打乱顺序</span><input type="checkbox" class="item disorder" /></div>'
+				+ '<div style=""><span style="display:block">渲染颜色</span><input type="checkbox" class="item colorful" /></div>';
 		var panl = document.createElement('div');
 		panl.id = "configPanl";
 		panl.style.cssText = "position: fixed; z-index:300; right:0; top:0; margin:50px; font-size:12px";
@@ -34,15 +30,26 @@ define(function(require,exports,module){
 		document.body.appendChild(panl);
 	})();
 
+	$('#configPanl .item').on('change',function(){
+		var config = getConfig();
+		atoms = getAtomsByRate(allAtoms,config.rate);
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		for(var i=0;i<atoms.length;i++){
+			cpi.drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1,config.colorful?atoms[i].rgba:'gray');
+		}
+	});
+
 	function getConfig(){
 		var config = {};
-		config.extract = $('#configPanl .extract').val();
-		config.disorder = $('#configPanl .disorder').check();
+		config.rate = $('#configPanl .rate').val() ;
+		config.disorder = $('#configPanl .disorder').get(0).checked;
+		config.colorful = $('#configPanl .colorful').get(0).checked;
+		console.log(config);
 		return config;
 	}
 
 	function collectAtomsWithRGBA(imageInfo){
-		var d = imageInfo.data,fullAtoms = [],width = imageInfo.width;
+		var d = imageInfo.data,allAtoms = [],width = imageInfo.width;
 		for(var i = 0;i<d.length;i+=4){
 			var total = d.length/4,
 				x,y,rgba;
@@ -50,9 +57,23 @@ define(function(require,exports,module){
 			x = i/4%width;
 			y = Math.floor(i/4/width);
 			rgba = 'rgba('+d[i]+','+d[i+1]+','+d[i+2]+','+d[i+3]+')';
-			fullAtoms.push({x:x,y:y,rgba:rgba});
+			allAtoms.push({x:x,y:y,rgba:rgba});
 		}
-		return fullAtoms;
+		return allAtoms;
+	}
+
+	function getAtomsByRate(allAtoms,rate){
+		var atoms = [],distance,cover,rad=i=0;
+		rate = Math.abs(rate < 1 ? rate : rate/100);
+		distance = Math.floor(1/rate);
+		console.log(distance,rate);
+		for(;i+rad<allAtoms.length;i+=cover){
+			rad = random(1,distance);
+			atoms.push(allAtoms[i+rad]);
+			cover = distance*2 - rad;
+		}
+		console.log(atoms.length);
+		return atoms;
 	}
 
 	// function upsetAtomsSequence(fullAtoms,atoms,atomsLength){
@@ -74,4 +95,7 @@ define(function(require,exports,module){
 		img.src = imgSrc;
 	}
 	exports.setImgSrc = setImgSrc;
+	exports.getAtoms = function(){
+		return atoms;
+	}
 });
