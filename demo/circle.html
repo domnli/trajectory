@@ -20,14 +20,32 @@
 			function(Atom,Motion,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
 					ctx = canvas.getContext("2d"),
-					atom = new Atom({x:random(0,canvas.width),y:random(0,canvas.height)});
+					atom = new Atom({x:canvas.width/2,y:canvas.height/2});
+				var r = 100,v = 0.095,rad = 0,internal = 1000/60,start=new Date().getTime();
+				function move(){
+					var cx,cy;
+					rad = rad+v;
+					if(rad>2*Math.PI){
+						// rad = 0;
+					}
+					cy = Math.sin(rad)*r+400;
+					cx = Math.cos(rad)*r+400;
+
+					if(new Date().getTime() > start + internal){
+						start = new Date().getTime();
+						atom.moveTo(cx,cy);
+						console.log(cx,cy);
+						// ctx.clearRect(0,0,canvas.width,canvas.height);
+						cpi.drawSolidCircle(ctx,atom.get("x"),atom.get("y"),5);	
+					}
+					
+
+				}
 
 				looper.add([
 					function(){
-						motion.ctx.clearRect(0,0,canvas.width,canvas.height);
-					},function(){
-						atom.move();
-				}]);
+						
+					},move]);
 				looper.run();
 		});
 	</script>
