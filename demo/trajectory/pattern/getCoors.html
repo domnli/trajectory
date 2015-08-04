@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../../lib/sea.js"></script>
+	<script type="text/javascript">
+		seajs.config();
+		seajs.use('../util/image2atom',function(tool){
+			tool.setImgSrc("arrowright.png");
+			window.getAtoms = tool.getAtoms;
+		});
+	</script>
+</head>
+<body style="margin:0;padding:0">
+	<div style="width:100%;height:100%"></div>
+</body>
+<script type="text/javascript">
+
+	function random(min,max){
+		return Math.floor(Math.random()*(max - min)) + min;
+	}
+
+	function mouseEvent(e){
+		if(e.button == 0) {
+			drawSolidCircle(ctx,e.x,e.y,1,'gray');
+			atoms.push({x:e.x,y:e.y});
+		}else{
+			atoms.pop();
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+			for(var i=0;i<atoms.length;i++){
+				drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1,'gray');
+			}
+		}
+	}
+
+	function collectAtoms(imgData,width){
+		var d = imgData,fullAtoms = [];
+		for(var i = 0;i<d.length;i+=4){
+			var total = d.length/4,
+				x,y;
+			if(d[i] < 120 && d[i+1] < 120 && d[i+2] < 120){
+				x = i/4%width;
+				y = Math.floor(i/4/width);
+				fullAtoms.push({x:x,y:y});
+			}
+		}
+		return fullAtoms;
+	}
+
+	function collectAtomsWithRGBA(imgData,width){
+		var d = imgData,fullAtoms = [];
+		for(var i = 0;i<d.length;i+=4){
+			var total = d.length/4,
+				x,y,rgba;
+			
+			x = i/4%width;
+			y = Math.floor(i/4/width);
+			rgba = 'rgba('+d[i]+','+d[i+1]+','+d[i+2]+','+d[i+3]+')';
+			fullAtoms.push({x:x,y:y,rgba:rgba});
+			
+		}
+		return fullAtoms;
+	}
+
+	function upsetAtomsSequence(fullAtoms,atoms,atomsLength){
+		var start,end,rads = [],
+			atomsLength = atomsLength || fullAtoms.length;
+		start = new Date().getTime();
+		while(atoms.length < atomsLength){
+			var rad = random(0,fullAtoms.length);
+			if(rads.indexOf(rad) == -1){
+				atoms.push(fullAtoms[rad]);
+				rads.push(rad);
+			}
+		}
+		end = new Date().getTime();
+		console.log((end - start)/1000);
+	}
+
+	// var canvas = createCanvas(window.innerWidth,window.innerHeight),
+	// 	ctx = canvas.getContext("2d"),
+	// 	fullAtoms = [];
+	// 	atoms = [];
+	// // 添加鼠标事件
+	// // canvas.onmousedown = mouseEvent;
+
+	// var img = new Image();
+	// img.src = "face.png";
+	// img.onload = function(){
+	// 	ctx.drawImage(img,0,0);
+	// 	var width = img.width,height=img.height,
+	// 		imgData = ctx.getImageData(0,0,img.width,img.height);
+	// 	fullAtoms = collectAtomsWithRGBA(imgData.data,width);
+	// 	// 打乱排列顺序,随机抽取atom
+	// 	upsetAtomsSequence(fullAtoms,atoms,30000);
+	// 	// atoms = fullAtoms;
+
+	// 	ctx.clearRect(0,0,canvas.width,canvas.height);
+
+	// 	var start,end;
+	// 	start = new Date().getTime();
+	// 	for(var i=0;i<atoms.length;i++){
+	// 		drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1,atoms[i].rgba);
+	// 	}
+	// 	end = new Date().getTime();
+	// 	console.log((end - start)/1000);
+	// }
+	
+</script>
+</html>
