@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>圆</title>
+	</head>
+	<script type="text/javascript" src="../sea.js"></script>
+	<script type="text/javascript">
+		seajs.config({
+			paths:{
+				"trajectory":"./trajectory"
+			}
+		});
+		seajs.use([ "trajectory/atom",
+					"trajectory/motion",
+					"trajectory/circle",
+					"trajectory/util/cpi",
+					"trajectory/util/looper",
+					"trajectory/util/random"
+					],
+			function(Atom,Motion,Circle,cpi,looper,random){
+				var canvas = cpi.createCanvasFullScreen(),
+					ctx = canvas.getContext("2d");
+
+				looper.add([
+					function(){
+						
+					},move]);
+				looper.run();
+		});
+	</script>
+	<body>
+		
+	</body>
+</html>
