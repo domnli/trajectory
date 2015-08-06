@@ -3,10 +3,11 @@ define(function(require,exports,module){
 		Atom = require("./atom");
 
 	function Circle(conf){
-		this.atoms = this.queue = [];
+		this.atoms = [],this.queue = [];
+		conf = conf||{};
 		this.radius = conf.radius||10;
 		this.center = {x:conf.x||10,y:conf.y||10};
-		this.vel = conf.vel||0.001;
+		this.vel = conf.vel||0.01;
 		this.radian = conf.radian||0;
 	}
 
@@ -37,4 +38,6 @@ define(function(require,exports,module){
 			this.atoms[i].set('y',queue[i].y);
 		}
 	}
+
+	module.exports = Circle;
 });

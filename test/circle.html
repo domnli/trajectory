@@ -4,11 +4,11 @@
 		<meta charset="utf-8">
 		<title>圆</title>
 	</head>
-	<script type="text/javascript" src="../sea.js"></script>
+	<script type="text/javascript" src="../lib/sea.js"></script>
 	<script type="text/javascript">
 		seajs.config({
 			paths:{
-				"trajectory":"./trajectory"
+				"trajectory":"../trajectory"
 			}
 		});
 		seajs.use([ "trajectory/atom",
@@ -20,12 +20,18 @@
 					],
 			function(Atom,Motion,Circle,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
-					ctx = canvas.getContext("2d");
-
-				looper.add([
-					function(){
-						
-					},move]);
+					ctx = canvas.getContext("2d"),
+					circle = new Circle({vel:0.05,x:300,y:300,radius:100});
+				circle.addAtom({x:100,y:100});
+				window.aaa = circle;
+				looper.add(function(){
+					ctx.clearRect(0,0,canvas.width,canvas.height);
+					for(var i = 0;i<circle.atoms.length;i++){
+						var atom = circle.atoms[i];
+						cpi.drawSolidCircle(ctx,atom.get("x"),atom.get("y"),5,atom.get('rgba'));
+					}
+					circle.next();
+				});
 				looper.run();
 		});
 	</script>
