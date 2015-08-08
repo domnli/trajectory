@@ -22,15 +22,19 @@
 				var canvas = cpi.createCanvasFullScreen(),
 					ctx = canvas.getContext("2d"),
 					circle = new Circle({vel:0.05,x:300,y:300,radius:100});
-				circle.addAtom({x:100,y:100});
+				circle.addAtom({x:295,y:295,radius:3});
+				circle.addAtom({x:290,y:290,radius:3});
+				circle.addAtom({x:285,y:285,radius:3});
+				circle.addAtom({x:280,y:280,radius:3});
+				circle.addAtom({x:275,y:275,radius:3});
+				circle.addAtom({x:270,y:270,radius:3});
+				circle.addAtom({x:265,y:265,radius:3});
+				
 				window.aaa = circle;
 				looper.add(function(){
 					ctx.clearRect(0,0,canvas.width,canvas.height);
-					for(var i = 0;i<circle.atoms.length;i++){
-						var atom = circle.atoms[i];
-						cpi.drawSolidCircle(ctx,atom.get("x"),atom.get("y"),5,atom.get('rgba'));
-					}
-					circle.next();
+					// circle.next();
+					circle.renderTo(canvas);
 				});
 				looper.run();
 		});
