@@ -23,13 +23,27 @@
         };
 }());
 
+/**
+	timerEvents = {
+		100:{   // 时间间隔
+				lastest:new Date(), // 最后执行时间
+				events:[] // 执行函数数组
+			}
+	}
+		{interval:100,latest:timestamp}:[functions]}
+*/
 define(function(require,exports,module){
-	var events = [],stop = false;
+	var events = [],stop = false,timerEvents={};
 
 	function loop(){
 		if(stop){return;}
 		for(var i = 0; i<events.length; i++){
 			events[i]();
+		}
+		for(var interval in timerEvents){
+			if(timerEvents.hasOwnProperty(interval)){
+				// TODO
+			}
 		}
 		window.requestAnimationFrame(loop);
 	}

@@ -1,8 +1,5 @@
 define(function(require,exports,module){
 
-	/**
-		timerAtoms = {Xms:atomArray}  // {100:[atom,atom,atom]}表示这些atom每100ms渲染一次
-	*/
 	var cpi = require("./cpi");
 	function Renderer(obj){
 		if(obj){return mixin(obj)};
