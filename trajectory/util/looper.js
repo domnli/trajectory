@@ -26,47 +26,73 @@
 /**
 	timerEvents = {
 		100:{   // 时间间隔
-				lastest:new Date(), // 最后执行时间
+				lastest:new Date().getTime(), // 最后执行时间
 				events:[] // 执行函数数组
 			}
 	}
 		{interval:100,latest:timestamp}:[functions]}
 */
 define(function(require,exports,module){
-	var events = [],stop = false,timerEvents={};
+	var stop = false,timerEvents={},numberReg = /^[0-9]*$/;
 
 	function loop(){
 		if(stop){return;}
-		for(var i = 0; i<events.length; i++){
-			events[i]();
-		}
-		for(var interval in timerEvents){
+		var i,interval,
+			now = new Date().getTime();
+		// for(var i = 0; i<events.length; i++){
+		// 	events[i]();
+		// }
+		for(interval in timerEvents){
 			if(timerEvents.hasOwnProperty(interval)){
-				// TODO
+				var events = timerEvents[interval];
+				if(events.lastest + parseInt(interval) <= now){
+					for(i = 0; i<events.events.length; i++){
+						events.events[i]();
+					}
+					events.lastest = now;
+				}
 			}
 		}
 		window.requestAnimationFrame(loop);
 	}
 
-	function addEvent(fn){
+	function addEvent(interval,fn){
+		if(fn == undefined){
+			fn = interval;
+			interval = 0;
+		}
+		if(!numberReg.test(interval)){
+			throw new Error("时间间隔应为整数");
+		}
+		if(timerEvents[interval] == undefined){
+			timerEvents[interval] = {
+				lastest:new Date().getTime(),
+				events:[]
+			};
+		}
 		if(fn instanceof Function){
-			events.push(fn);
+			timerEvents[interval].events.push(fn);
 		}
 		if(fn instanceof Array){
 			for(var i = 0; i<fn.length; i++){
-				events.push(fn[i]);
+				timerEvents[interval].events.push(fn[i]);
 			}
 		}
 	}
 
 	function removeEvent(fn){
-		var index = 0;
-		for(;index<events.length;index++){
-			if(events[index] === fn){
-				break;
+		var index,interval,events;
+		for(interval in timerEvents){
+			if(timerEvents.hasOwnProperty(interval)){
+				events = timerEvents[interval].events;
+				for(index = 0;index<events.length;index++){
+					if(events[index] === fn){
+						events.splice(index,1);
+					}
+				}
 			}
 		}
-		events.splice(index,1);
+	
 	}
 
 	function stop(){
@@ -77,7 +103,7 @@ define(function(require,exports,module){
 		stop = false;
 		loop();
 	}
-
+window.timerEvents = timerEvents;
 	exports.run = run;
 	exports.add = addEvent;
 	exports.remove = removeEvent;

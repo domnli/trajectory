@@ -11,31 +11,63 @@
 				"trajectory":"../trajectory"
 			}
 		});
-		seajs.use([ "trajectory/atom",
-					"trajectory/motion",
-					"trajectory/circle",
-					"trajectory/util/cpi",
-					"trajectory/util/looper",
-					"trajectory/util/random"
-					],
+		seajs.use([ "trajectory/atom","trajectory/motion","trajectory/circle","trajectory/util/cpi","trajectory/util/looper","trajectory/util/random"],
 			function(Atom,Motion,Circle,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
 					ctx = canvas.getContext("2d"),
-					circle = new Circle({vel:0.05,x:300,y:300,radius:100});
-				circle.addAtom({x:295,y:295,radius:3});
-				circle.addAtom({x:290,y:290,radius:3});
-				circle.addAtom({x:285,y:285,radius:3});
-				circle.addAtom({x:280,y:280,radius:3});
-				circle.addAtom({x:275,y:275,radius:3});
-				circle.addAtom({x:270,y:270,radius:3});
-				circle.addAtom({x:265,y:265,radius:3});
-				
-				window.aaa = circle;
-				looper.add(function(){
+					circle = new Circle({vel:Math.PI/6,x:300,y:300,radius:100});
+				//1
+				circle.addAtom({y:300,x:310,radius:5});
+				circle.addAtom({y:300,x:320,radius:4.5});
+				circle.addAtom({y:300,x:330,radius:4});
+				circle.addAtom({y:300,x:340,radius:3.5});
+				circle.addAtom({y:300,x:350,radius:3});
+				circle.addAtom({y:300,x:360,radius:2.5});
+				circle.addAtom({y:300,x:370,radius:2});
+				circle.addAtom({y:300,x:380,radius:1.5});
+				circle.addAtom({y:300,x:390,radius:1});
+				//2
+				circle.addAtom({x:300,y:210,radius:5});
+				circle.addAtom({x:300,y:220,radius:4.5});
+				circle.addAtom({x:300,y:230,radius:4});
+				circle.addAtom({x:300,y:240,radius:3.5});
+				circle.addAtom({x:300,y:250,radius:3});
+				circle.addAtom({x:300,y:260,radius:2.5});
+				circle.addAtom({x:300,y:270,radius:2});
+				circle.addAtom({x:300,y:280,radius:1.5});
+				circle.addAtom({x:300,y:290,radius:1});
+				//3
+				circle.addAtom({y:300,x:210,radius:5});
+				circle.addAtom({y:300,x:220,radius:4.5});
+				circle.addAtom({y:300,x:230,radius:4});
+				circle.addAtom({y:300,x:240,radius:3.5});
+				circle.addAtom({y:300,x:250,radius:3});
+				circle.addAtom({y:300,x:260,radius:2.5});
+				circle.addAtom({y:300,x:270,radius:2});
+				circle.addAtom({y:300,x:280,radius:1.5});
+				circle.addAtom({y:300,x:290,radius:1});
+				//4
+				circle.addAtom({x:300,y:310,radius:5});
+				circle.addAtom({x:300,y:320,radius:4.5});
+				circle.addAtom({x:300,y:330,radius:4});
+				circle.addAtom({x:300,y:340,radius:3.5});
+				circle.addAtom({x:300,y:350,radius:3});
+				circle.addAtom({x:300,y:360,radius:2.5});
+				circle.addAtom({x:300,y:370,radius:2});
+				circle.addAtom({x:300,y:380,radius:1.5});
+				circle.addAtom({x:300,y:390,radius:1});
+
+				window.circle = circle;
+				function render(){
 					ctx.clearRect(0,0,canvas.width,canvas.height);
-					circle.next();
 					circle.renderTo(canvas);
-				});
+				}
+				function move(){
+					circle.next();	
+				}
+				
+				looper.add(render);
+				looper.add(1000,move);
 				looper.run();
 		});
 	</script>
