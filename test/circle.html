@@ -11,53 +11,22 @@
 				"trajectory":"../trajectory"
 			}
 		});
-		seajs.use([ "trajectory/atom","trajectory/motion","trajectory/circle","trajectory/util/cpi","trajectory/util/looper","trajectory/util/random"],
-			function(Atom,Motion,Circle,cpi,looper,random){
+		seajs.use(["trajectory/circle","trajectory/util/cpi","trajectory/util/looper","trajectory/util/random"],
+			function(Circle,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
 					ctx = canvas.getContext("2d"),
-					circle = new Circle({vel:Math.PI/6,x:300,y:300,radius:100});
-				//1
-				circle.addAtom({y:300,x:310,radius:5});
-				circle.addAtom({y:300,x:320,radius:4.5});
-				circle.addAtom({y:300,x:330,radius:4});
-				circle.addAtom({y:300,x:340,radius:3.5});
-				circle.addAtom({y:300,x:350,radius:3});
-				circle.addAtom({y:300,x:360,radius:2.5});
-				circle.addAtom({y:300,x:370,radius:2});
-				circle.addAtom({y:300,x:380,radius:1.5});
-				circle.addAtom({y:300,x:390,radius:1});
-				//2
-				circle.addAtom({x:300,y:210,radius:5});
-				circle.addAtom({x:300,y:220,radius:4.5});
-				circle.addAtom({x:300,y:230,radius:4});
-				circle.addAtom({x:300,y:240,radius:3.5});
-				circle.addAtom({x:300,y:250,radius:3});
-				circle.addAtom({x:300,y:260,radius:2.5});
-				circle.addAtom({x:300,y:270,radius:2});
-				circle.addAtom({x:300,y:280,radius:1.5});
-				circle.addAtom({x:300,y:290,radius:1});
-				//3
-				circle.addAtom({y:300,x:210,radius:5});
-				circle.addAtom({y:300,x:220,radius:4.5});
-				circle.addAtom({y:300,x:230,radius:4});
-				circle.addAtom({y:300,x:240,radius:3.5});
-				circle.addAtom({y:300,x:250,radius:3});
-				circle.addAtom({y:300,x:260,radius:2.5});
-				circle.addAtom({y:300,x:270,radius:2});
-				circle.addAtom({y:300,x:280,radius:1.5});
-				circle.addAtom({y:300,x:290,radius:1});
-				//4
-				circle.addAtom({x:300,y:310,radius:5});
-				circle.addAtom({x:300,y:320,radius:4.5});
-				circle.addAtom({x:300,y:330,radius:4});
-				circle.addAtom({x:300,y:340,radius:3.5});
-				circle.addAtom({x:300,y:350,radius:3});
-				circle.addAtom({x:300,y:360,radius:2.5});
-				circle.addAtom({x:300,y:370,radius:2});
-				circle.addAtom({x:300,y:380,radius:1.5});
-				circle.addAtom({x:300,y:390,radius:1});
-
-				window.circle = circle;
+					circle = new Circle({vel:Math.PI/180,x:canvas.width/2,y:canvas.height/2,radius:10});
+				
+				circle.addAtom({x:400,y:300,radius:3,rgba:'rgba(20,240,0,1)'});
+				circle.addAtom({x:410,y:310,radius:3,rgba:'rgba(0,90,0,1)'});
+				circle.addAtom({x:420,y:320,radius:3,rgba:'rgba(0,100,0,1)'});
+				circle.addAtom({x:430,y:330,radius:3,rgba:'rgba(0,23,44,1)'});
+				circle.addAtom({x:440,y:340,radius:3,rgba:'rgba(0,0,99,1)'});
+				circle.addAtom({x:450,y:350,radius:3,rgba:'rgba(0,0,33,1)'});
+				circle.addAtom({x:460,y:360,radius:3,rgba:'rgba(0,0,44,1)'});
+				circle.addAtom({x:470,y:370,radius:3,rgba:'rgba(210,0,3,1)'});
+				circle.addAtom({x:480,y:380,radius:3,rgba:'rgba(0,0,0,1)'});
+				
 				function render(){
 					ctx.clearRect(0,0,canvas.width,canvas.height);
 					circle.renderTo(canvas);
@@ -65,9 +34,9 @@
 				function move(){
 					circle.next();	
 				}
-				
+
 				looper.add(render);
-				looper.add(1000,move);
+				looper.add(move);
 				looper.run();
 		});
 	</script>
