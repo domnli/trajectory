@@ -13,4 +13,5 @@ define(function(require,exports,module){
 	 			coors[i] = {x:dest.x+x,y:dest.y+y};
 	 		}
 	 	}
-	}	
+	}
+});
