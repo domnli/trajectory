@@ -33,10 +33,10 @@
 		{interval:100,latest:timestamp}:[functions]}
 */
 define(function(require,exports,module){
-	var stop = false,timerEvents={},numberReg = /^[0-9]*$/;
+	var stoped = false,timerEvents={},numberReg = /^[0-9]*$/;
 
 	function loop(){
-		if(stop){return;}
+		if(stoped){return;}
 		var i,interval,
 			now = new Date().getTime();
 		// for(var i = 0; i<events.length; i++){
@@ -96,11 +96,11 @@ define(function(require,exports,module){
 	}
 
 	function stop(){
-		stop = true;
+		stoped = true;
 	}
 
 	function run(){
-		stop = false;
+		stoped = false;
 		loop();
 	}
 window.timerEvents = timerEvents;

@@ -19,8 +19,8 @@ define(function(require,exports,module){
 	Emitter(Atom.prototype);
 
 	Atom.prototype._init = function(options){
-		this._attr = options;
-
+		this.option = options;
+		this._attr = {};
 		this._attr.x = options.x||0;
 		this._attr.y = options.y||0;
 		this._attr.destination = options.destination||{x:this.get('x'),y:this.get('y')};
