@@ -22,21 +22,30 @@ define(function(require,exports,module){
 	(function(){
 		var tpl = '<div style=""><span style="display:block">抽取率</span><input type="range" min=1 max=100 class="item rate" /></div>'
 				+ '<div style=""><span style="display:block">打乱顺序</span><input type="checkbox" class="item disorder" /></div>'
-				+ '<div style=""><span style="display:block">渲染颜色</span><input type="checkbox" class="item colorful" /></div>';
-		var panl = document.createElement('div');
+				+ '<div style=""><span style="display:block">渲染颜色</span><input type="checkbox" class="item colorful" /></div>'
+				+ '<div style=""><span style="display:block">颜色过滤</span>R><input type="text" value="0" style="width:25px" class="item r" />&nbsp;G><input type="text" value="0" style="width:25px" class="item g" />&nbsp;B><input type="text" value="0" style="width:25px" class="item b" />&nbsp;A><input type="text" value="0" style="width:25px" class="item a" /></div>';
+		var panl = document.createElement('div'),
+			mask = document.createElement('div');
 		panl.id = "configPanl";
+		mask.id = "panlMask";
 		panl.style.cssText = "position: fixed; z-index:300; right:0; top:0; margin:50px; font-size:12px";
+		mask.style.cssText = "position: fixed; z-index:301; right:0; top:0; width:300px; height:0px; padding-top:250px; background-color:gray; opacity:0.5; display:none";
+		mask.innerHTML = "loading...";
 		panl.innerHTML = tpl;
+		document.body.appendChild(mask);
 		document.body.appendChild(panl);
 	})();
 
 	$('#configPanl .item').on('change',function(){
+		$('#panlMask').show();
 		var config = getConfig();
+			allAtoms = collectAtomsWithRGBA(imageInfo);
 		atoms = getAtomsByRate(allAtoms,config.rate);
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		for(var i=0;i<atoms.length;i++){
 			cpi.drawSolidCircle(ctx,atoms[i].x,atoms[i].y,1,config.colorful?atoms[i].rgba:'gray');
 		}
+		$('#panlMask').hide();
 	});
 
 	function getConfig(){
@@ -44,12 +53,16 @@ define(function(require,exports,module){
 		config.rate = $('#configPanl .rate').val() ;
 		config.disorder = $('#configPanl .disorder').get(0).checked;
 		config.colorful = $('#configPanl .colorful').get(0).checked;
-		console.log(config);
+		config.r = $('#configPanl .r').val();
+		config.g = $('#configPanl .g').val();
+		config.b = $('#configPanl .b').val();
+		config.a = $('#configPanl .a').val();
+		// TODO 检测输入值
 		return config;
 	}
 
 	function collectAtomsWithRGBA(imageInfo){
-		var d = imageInfo.data,allAtoms = [],width = imageInfo.width;
+		var d = imageInfo.data,allAtoms = [],width = imageInfo.width,config = getConfig();
 		for(var i = 0;i<d.length;i+=4){
 			var total = d.length/4,
 				x,y,rgba;
@@ -57,7 +70,9 @@ define(function(require,exports,module){
 			x = i/4%width;
 			y = Math.floor(i/4/width);
 			rgba = 'rgba('+d[i]+','+d[i+1]+','+d[i+2]+','+d[i+3]+')';
-			allAtoms.push({x:x,y:y,rgba:rgba});
+			if(d[i]>config.r && d[i+1]>config.g && d[i+2]>config.b && d[i+3]>config.a){
+				allAtoms.push({x:x,y:y,rgba:rgba});
+			}
 		}
 		return allAtoms;
 	}
