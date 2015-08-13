@@ -98,7 +98,9 @@ define(function(require,exports,module){
 		console.log(distance,rate);
 		for(;i+rad<allAtoms.length;i+=cover){
 			rad = random(1,distance);
-			atoms.push(allAtoms[i+rad]);
+			if(allAtoms[i+rad]){
+				atoms.push(allAtoms[i+rad]);	
+			}
 			cover = distance*2 - rad;
 		}
 		console.log(atoms.length);
