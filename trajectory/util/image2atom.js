@@ -35,7 +35,7 @@ define(function(require,exports,module){
 		panl.id = "configPanl";
 		mask.id = "panlMask";
 		panl.style.cssText = "position: fixed; z-index:300; right:0; top:0; margin:50px; font-size:12px";
-		mask.style.cssText = "position: fixed; z-index:301; right:0; top:0; width:300px; height:0px; padding-top:250px; background-color:gray; opacity:0.5; display:none";
+		mask.style.cssText = "position: fixed; z-index:301; right:0; top:0; width:300px; height:0px; padding-top:300px; background-color:gray; opacity:0.5; display:none";
 		mask.innerHTML = "loading...";
 		panl.innerHTML = tpl;
 		document.body.appendChild(mask);
