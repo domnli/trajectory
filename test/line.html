@@ -3,14 +3,13 @@
 	<head>
 		<meta charset="utf-8">
 		<title>直线</title>
-	</head>
 	<script type="text/javascript" src="../lib/sea.js"></script>
+	<script type="text/javascript" src="../dist/trajectory.js"></script>
+	</head>
+	<body>
+		
+	</body>
 	<script type="text/javascript">
-		seajs.config({
-			paths:{
-				"trajectory":"../trajectory"
-			}
-		});
 		seajs.use(["trajectory/line","trajectory/util/cpi","trajectory/util/looper","trajectory/util/random"],
 			function(Line,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
@@ -33,7 +32,4 @@
 				looper.run();
 		});
 	</script>
-	<body>
-		
-	</body>
 </html>

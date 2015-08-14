@@ -31,16 +31,16 @@ define(function(require,exports,module){
 		this.on('destinationAlter',function(){
 			this.rest = false;
 		});
-	}
+	};
 
 	Atom.prototype.get = function(p){
 		return this._attr[p];
-	}
+	};
 
 	Atom.prototype.set = function(p,v){
 		this._attr[p] = v;
 		this.emit(p+"Alter");
-	}
+	};
 
 	Atom.prototype.move = function(){
 		if(this.rest){
@@ -55,11 +55,11 @@ define(function(require,exports,module){
 			distance,tx,ty;
 
 		distance = Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
-		if(distance == 0){
+		if(distance === 0){
 			this.rest = true;
 			return;
 		}
-		tx = dx*vel/distance,
+		tx = dx*vel/distance;
 		ty = dy*vel/distance;
 		if(Math.abs(tx) >= Math.abs(dx)){
 			this._attr.x = dest.x;
@@ -71,12 +71,12 @@ define(function(require,exports,module){
 		}else{
 			this._attr.y += ty;
 		}
-	}
+	};
 
 	Atom.prototype.moveTo = function(x,y){
-		isNaN(x)?undefined:this.set('x',x);
-		isNaN(y)?undefined:this.set('y',y);
-	}
+		if(!isNaN(x)){this.set('x',x);}
+		if(!isNaN(y)){this.set('y',y);}
+	};
 
 	module.exports =  Atom;
 });

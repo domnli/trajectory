@@ -29,10 +29,10 @@ define(function(require,exports,module){
 			circle.atoms.push(atom);
 			
 			atom.radius = Math.sqrt(Math.pow(Math.abs(circle.center.x-atom.get('x')),2) + Math.pow(Math.abs(circle.center.y-atom.get('y')),2));
-			if(atom.radius == 0){
+			if(atom.radius === 0){
 				atom.radian = 0;
 			}else if(atom.get('x')>circle.center.x && atom.get('y')<=circle.center.y){ // 第一象限
-				atom.radian = Math.asin((circle.center.y-atom.get('y'))/atom.radius)
+				atom.radian = Math.asin((circle.center.y-atom.get('y'))/atom.radius);
 			}else if(atom.get('x')<=circle.center.x && atom.get('y')<circle.center.y){//第二象限
 				atom.radian = Math.PI - Math.asin((circle.center.y-atom.get('y'))/atom.radius);
 			}else if(atom.get('x')<circle.center.x && atom.get('y')>=circle.center.y){//第三象限
@@ -41,7 +41,7 @@ define(function(require,exports,module){
 				atom.radian = -Math.asin((atom.get('y')-circle.center.y)/atom.radius);
 			}
 		}
-	}
+	};
 
 	Circle.prototype.next = function(){
 		for(var i = 0;i<this.atoms.length;i++){
@@ -53,7 +53,7 @@ define(function(require,exports,module){
 			atom.set('x',Math.cos(atom.radian)*radius + this.center.x);
 			atom.set('y',-Math.sin(atom.radian)*radius + this.center.y);
 		}
-	}
+	};
 
 	module.exports = Circle;
 });

@@ -29,7 +29,7 @@ define(function(require,exports,module){
 			atom.set('vel',line.vel);
 			line.atoms.push(atom);
 		}
-	}
+	};
 
 	Line.prototype.next = function(){
 		var i = 0,atom,rest = true;
@@ -43,7 +43,7 @@ define(function(require,exports,module){
 		if(rest){
 			this.emit("rest");
 		}
-	}
+	};
 
 	/**
 		把atom随机放到指定区域
@@ -58,7 +58,7 @@ define(function(require,exports,module){
 			this.atoms[i].set("x",random(x,width));
 			this.atoms[i].set("y",random(y,height));
 		}
-	}
+	};
 	/**
 		随机分配atom的目的地
 	*/
@@ -71,7 +71,7 @@ define(function(require,exports,module){
 		for(var i = 0;i<this.atoms.length;i++){
 			this.atoms[i].set('destination',{x:random(0,width),y:random(0,height)});
 		}
-	}
+	};
 
 	/**
 		设置速度
@@ -82,7 +82,7 @@ define(function(require,exports,module){
 				this.atoms[i].set("vel",v);
 			}
 		}
-	}
+	};
 
 	/**
 	 	批量设置atom目的地 不足则新建
@@ -91,7 +91,7 @@ define(function(require,exports,module){
 	 	if(coors instanceof Array){
 	 		var i = 0;
 	 		for(;i<this.atoms.length;i++){
-	 			if(coors[i] == undefined){
+	 			if(coors[i] === undefined){
 	 				break;
 	 			}
 	 			this.atoms[i].set("destination",coors[i]);
@@ -105,7 +105,7 @@ define(function(require,exports,module){
 	 		}
 	 	}
 
-	 }
+	 };
 
 	module.exports = Line;
 
