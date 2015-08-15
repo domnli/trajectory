@@ -4,22 +4,17 @@
 		<meta charset="utf-8">
 		<title>mouse press</title>
 	<script type="text/javascript" src="../lib/sea.js"></script>
-	<script type="text/javascript" src="../dist/trajectory.js"></script>
+	<script type="text/javascript" src="../dest/trajectory.js"></script>
 	</head>
 	<body>
 		
 	</body>
 	<script type="text/javascript">
-		seajs.config({
-			paths:{
-				"trajectory":"../trajectory"
-			}
-		});
 		seajs.use([ "trajectory/atom",
 					"trajectory/line",
 					"trajectory/util/cpi",
 					"trajectory/util/looper",
-					"trajectory/pattern/hello/hello_260_75_500"
+					"../dest/pattern/hello/hello_260_75_500"
 					],
 			function(Atom,Line,cpi,looper,shape){
 				var canvas = cpi.createCanvasFullScreen(),

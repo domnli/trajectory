@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 
 		clean: {
-			before:['dist'],
+			before:['dest','.build'],
 			after:['.build']
 		},
 
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 				files: [{
 					expand:true,
 					cwd: 'trajectory',
-					src: ['*.js','util/*.js'],
+					src: ['**/*.js'],
 					dest: '.build/'
 				}]
 			},
@@ -38,17 +38,39 @@ module.exports = function(grunt) {
 			trajectory: {
 				files: [
 					{
-						'dist/trajectory.js': ['.build/**/*.js']
+						'dest/trajectory.js': ['.build/*.js','.build/util/*.js']
 					}
 				]
-			},
+			}
 		},
+		copy: {
+			pattern: {
+				files:[
+					{expand: true,cwd: 'trajectory', src: ['pattern/**/*.js'], dest: 'dest/'}
+				]
+			}
+		},
+		uglify:{
+			dest:{
+				files: [
+					{
+						expand: true,
+						cwd: 'dest/',
+						src: ['**/*.js'],
+						dest: 'dest/',
+						ext: '.js'
+					}
+				]
+			}
+		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-cmd-transport');
 	grunt.loadNpmTasks('grunt-cmd-concat');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 
-	grunt.registerTask('default', ['clean:before','jshint','transport','concat','clean:after']);
+	grunt.registerTask('default', ['clean:before','jshint','transport','concat','copy','uglify','clean:after']);
 };
