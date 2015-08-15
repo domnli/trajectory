@@ -14,8 +14,11 @@
 			function(Line,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
 					ctx = canvas.getContext("2d"),
-					line = new Line({vel:8});
-				line.addAtom({x:1,y:1,radius:3,destination:{x:100,y:100}});
+					line = new Line({vel:10});
+				for(var i = 0; i<100; i++){
+					line.addAtom({x:canvas.width/2,y:canvas.height/2,radius:3});
+				}
+
 				line.on('rest',function(){
 					line.randomDestination(0,0,canvas.width,canvas.height);
 				});

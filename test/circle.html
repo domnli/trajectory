@@ -15,17 +15,15 @@
 			function(Circle,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
 					ctx = canvas.getContext("2d"),
-					circle = new Circle({vel:Math.PI/180,x:canvas.width/2,y:canvas.height/2,radius:10});
+					cx=canvas.width/2,cy=canvas.height/2,
+					circle = new Circle({vel:Math.PI/180,x:cx,y:cy});
 				
-				circle.addAtom({x:400,y:300,radius:3,rgba:'rgba(20,240,0,1)'});
-				circle.addAtom({x:410,y:310,radius:3,rgba:'rgba(0,90,0,1)'});
-				circle.addAtom({x:420,y:320,radius:3,rgba:'rgba(0,100,0,1)'});
-				circle.addAtom({x:430,y:330,radius:3,rgba:'rgba(0,23,44,1)'});
-				circle.addAtom({x:440,y:340,radius:3,rgba:'rgba(0,0,99,1)'});
-				circle.addAtom({x:450,y:350,radius:3,rgba:'rgba(0,0,33,1)'});
-				circle.addAtom({x:460,y:360,radius:3,rgba:'rgba(0,0,44,1)'});
-				circle.addAtom({x:470,y:370,radius:3,rgba:'rgba(210,0,3,1)'});
-				circle.addAtom({x:480,y:380,radius:3,rgba:'rgba(0,0,0,1)'});
+				circle.addAtom({x:cx-30,y:cy-30,radius:3,rgba:'rgba(20,240,0,1)'});
+				circle.addAtom({x:cx-40,y:cy-40,radius:3,rgba:'rgba(20,240,0,1)'});
+				circle.addAtom({x:cx-50,y:cy-50,radius:3,rgba:'rgba(20,240,0,1)'});
+				circle.addAtom({x:cx-60,y:cy-60,radius:3,rgba:'rgba(0,90,0,1)'});
+				circle.addAtom({x:cx-70,y:cy-70,radius:3,rgba:'rgba(0,90,0,1)'});
+				circle.addAtom({x:cx-80,y:cy-80,radius:3,rgba:'rgba(0,90,0,1)'});
 				
 				function render(){
 					ctx.clearRect(0,0,canvas.width,canvas.height);
