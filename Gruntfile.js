@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 			options: {
 				paths : ['.'],
 				idleading:'trajectory/',
-				debug:false,
+				debug:true,
 				alias:{
 					jquery:'lib/jquery'
 				}
@@ -38,6 +38,7 @@ module.exports = function(grunt) {
 			trajectory: {
 				files: [
 					{
+						'dest/trajectory-debug.js': ['.build/*-debug.js','.build/util/*-debug.js'],
 						'dest/trajectory.js': ['.build/*.js','.build/util/*.js']
 					}
 				]
@@ -56,7 +57,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'dest/',
-						src: ['**/*.js'],
+						src: ['**/*.js','!*-debug.js'],
 						dest: 'dest/',
 						ext: '.js'
 					}

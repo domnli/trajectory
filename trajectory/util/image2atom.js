@@ -4,7 +4,7 @@
 define(function(require,exports,module){
 	var cpi = require('./cpi'),
 		random = require('./random'),
-		$ = require('jquery'),
+		$ = jQuery,
 		canvas = cpi.createCanvasFullScreen(),
 		ctx = canvas.getContext('2d'),
 		img = new Image();
@@ -68,7 +68,7 @@ define(function(require,exports,module){
 		config.gmax = $('#configPanl .gmax').val();
 		config.bmax = $('#configPanl .bmax').val();
 		config.amax = $('#configPanl .amax').val();
-		// TODO 检测输入值
+		// TODO 检测输入值 >=0 && <= 255
 		return config;
 	}
 

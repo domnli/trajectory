@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang='zh'>
 <head>
-	<script type="text/javascript" src="../../lib/sea.js"></script>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="../lib/sea.js"></script>
+	<script type="text/javascript" src="../lib/jquery.js"></script>
+	<script type="text/javascript" src="../seajs_config.js"></script>
+	<!-- // <script type="text/javascript" src="../dest/trajectory.js"></script> -->
 	<script type="text/javascript">
-		seajs.config();
-		seajs.use('../util/image2atom',function(tool){
+
+		seajs.use('trajectory/util/image2atom',function(tool){
 			tool.setImgSrc("pic.jpg");
 			window.getAtoms = tool.getAtoms;
 		});
