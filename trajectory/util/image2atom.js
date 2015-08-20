@@ -80,7 +80,7 @@ define(function(require,exports,module){
 			
 			x = i/4%width;
 			y = Math.floor(i/4/width);
-			rgba = 'rgba('+d[i]+','+d[i+1]+','+d[i+2]+','+d[i+3]+')';
+			rgba = 'rgba('+d[i]+','+d[i+1]+','+d[i+2]+','+(d[i+3]/255).toFixed(2)+')';
 			if(config.rmin <= d[i] && d[i] <= config.rmax
 				&& config.gmin <= d[i+1] && d[i+1] <= config.gmax 
 				&& config.bmin <= d[i+2] && d[i+2] <= config.bmax 

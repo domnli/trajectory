@@ -13,12 +13,6 @@ define(function(require,exports,module){
 	var Emitter = require("./util/emitter");
 
 	function Atom(options){
-		this._init(options);
-	}
-
-	Emitter(Atom.prototype);
-
-	Atom.prototype._init = function(options){
 		this.option = options;
 		this._attr = {};
 		this._attr.x = options.x||0;
@@ -31,7 +25,9 @@ define(function(require,exports,module){
 		this.on('destinationAlter',function(){
 			this.rest = false;
 		});
-	};
+	}
+
+	Emitter(Atom.prototype);
 
 	Atom.prototype.get = function(p){
 		return this._attr[p];
@@ -40,42 +36,6 @@ define(function(require,exports,module){
 	Atom.prototype.set = function(p,v){
 		this._attr[p] = v;
 		this.emit(p+"Alter");
-	};
-
-	Atom.prototype.move = function(){
-		if(this.rest){
-			return;
-		}
-		var px = this.get('x'),
-			py = this.get('y'),
-			dest = this.get('destination'),
-			dx = dest.x - px,
-			dy = dest.y - py,
-			vel = this.get('vel'),
-			distance,tx,ty;
-
-		distance = Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
-		if(distance === 0){
-			this.rest = true;
-			return;
-		}
-		tx = dx*vel/distance;
-		ty = dy*vel/distance;
-		if(Math.abs(tx) >= Math.abs(dx)){
-			this._attr.x = dest.x;
-		}else{
-			this._attr.x += tx;
-		}
-		if(Math.abs(ty) >= Math.abs(dy)){
-			this._attr.y = dest.y;
-		}else{
-			this._attr.y += ty;
-		}
-	};
-
-	Atom.prototype.moveTo = function(x,y){
-		if(!isNaN(x)){this.set('x',x);}
-		if(!isNaN(y)){this.set('y',y);}
 	};
 
 	module.exports =  Atom;

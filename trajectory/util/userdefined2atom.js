@@ -10,9 +10,9 @@ define(function(require,exports,module){
 	var atoms = [],crtAtom;
 
 	(function(){
-		var tpl = '<div style=""><span style="display:block">rgba</span><input type="color" min=1 max=100 class="item rgba" /></div>'
-				+ '<div style=""><span style="display:block">半径</span><input type="checkbox" class="item radius" /></div>'
-				+ '<div style="margin-top:10px"><button id="executeBtn">执行</button></div>';
+		var tpl = '<div style=""><span style="display:block">颜色</span><input type="color"class="item rgb" /></div>'
+				+ '<div style=""><span style="display:block">透明</span><input type="input"  style="width:25px;" value="1" class="item alpha" /></div>'
+				+ '<div style=""><span style="display:block;margin-top:3px">半径</span><input type="input" style="width:25px;" value="3" class="item radius" /></div>';
 		var panl = document.createElement('div'),
 			mask = document.createElement('div');
 		panl.id = "configPanl";
@@ -26,10 +26,13 @@ define(function(require,exports,module){
 	})();
 
 	function getConfig(){
-		var config = {};
-		config.rgba = $('#configPanl .rgba').val() ;
+		var config = {},
+			hex = $('#configPanl .rgb').val(),
+			alpha = $('#configPanl .alpha').val();
+		// TODO 检测输入值
+		config.rgba = 'rgba(' + parseInt(hex.substr(1,2),16) + ',' + parseInt(hex.substr(3,2),16) + ',' + parseInt(hex.substr(5,2),16) + ',' + alpha + ')';
 		config.radius = $('#configPanl .radius').val();
-		
+		console.log(config);
 		return config;
 	}
 
@@ -49,21 +52,27 @@ define(function(require,exports,module){
 				crtAtom.x += 1;
 				break;
 		}
-		console.log(e);
 		draw();
 	});
 	$(document).on('keyup',function(e){
-		draw();
-		console.log(e);
+
 	});
-	$(document).on('mousedown',function(e){
+	$(canvas).on('mousedown',function(e){
+		var config = getConfig();
+		crtAtom = {x:e.clientX,y:e.clientY,radius:config.radius,rgba:config.rgba};
 		atoms.push(crtAtom);
-		crtAtom = {x:e.clientX,y:e.clientY};
 		draw();
 	});
 
 	function draw(){
 		ctx.clearRect(0,0,canvas.width,canvas.height);
-		cpi.drawSolidCircle(ctx,crtAtom.x,crtAtom.y,3,'black');
+		for(var i=0; i<atoms.length; i++){
+			var atom = atoms[i];
+			cpi.drawSolidCircle(ctx,atom.x,atom.y,atom.radius,atom.rgba);
+		}
+	}
+
+	exports.getAtoms = function(){
+		return atoms;
 	}
 });

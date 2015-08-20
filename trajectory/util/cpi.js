@@ -44,6 +44,7 @@ define(function(require,exports,module){
 	function drawSolidCircle(ctx,x,y,r,fillStyle){
 		ctx.beginPath();
 		ctx.arc(x,y,r,0,2*Math.PI);
+		console.log(fillStyle);
 		ctx.fillStyle = fillStyle;
 		ctx.fill();
 	}

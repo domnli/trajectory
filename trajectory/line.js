@@ -36,12 +36,42 @@ define(function(require,exports,module){
 		for(;i<this.atoms.length;i++){
 			atom = this.atoms[i];
 			if(!atom.rest){
-				atom.move();
+				_next(atom);
 				rest = false;
 			}
 		}
 		if(rest){
 			this.emit("rest");
+		}
+
+		function _next(atom){
+			if(this.rest){return;}
+			
+			var px = atom.get('x'),
+				py = atom.get('y'),
+				dest = atom.get('destination'),
+				dx = dest.x - px,
+				dy = dest.y - py,
+				vel = atom.get('vel'),
+				distance,tx,ty;
+
+			distance = Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
+			if(distance === 0){
+				atom.rest = true;
+				return;
+			}
+			tx = dx*vel/distance;
+			ty = dy*vel/distance;
+			if(Math.abs(tx) >= Math.abs(dx)){
+				atom._attr.x = dest.x;
+			}else{
+				atom._attr.x += tx;
+			}
+			if(Math.abs(ty) >= Math.abs(dy)){
+				atom._attr.y = dest.y;
+			}else{
+				atom._attr.y += ty;
+			}
 		}
 	};
 
