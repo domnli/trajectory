@@ -46,7 +46,6 @@ define(function(require,exports,module){
 
 		function _next(atom){
 			if(this.rest){return;}
-			
 			var px = atom.get('x'),
 				py = atom.get('y'),
 				dest = atom.get('destination'),
@@ -58,6 +57,7 @@ define(function(require,exports,module){
 			distance = Math.sqrt(Math.pow(Math.abs(dx),2) + Math.pow(Math.abs(dy),2));
 			if(distance === 0){
 				atom.rest = true;
+				atom.emit('rest');
 				return;
 			}
 			tx = dx*vel/distance;
