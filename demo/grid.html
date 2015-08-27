@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>grid</title>
+	<script type="text/javascript" src="../sea.js"></script>
+	<script type="text/javascript" src="dest/trajectory.js"></script>
+	</head>
+	<body>
+		
+	</body>
+	<script type="text/javascript">
+		seajs.use([ "trajectory/atom",
+					"trajectory/line",
+					"trajectory/util/cpi",
+					"trajectory/util/looper"
+					],
+			function(Atom,Line,cpi,looper){
+				var canvas = cpi.createCanvasFullScreen(),
+					ctx = canvas.getContext('2d'),
+					line = new Line({vel:8});
+
+				var atom,ny = 50;
+
+				function getAtom(){
+					var atom = new Atom({x:0,y:50});
+				}
+
+				function addAtomX(ny){
+					if(line.atoms.length >= 400 ){return;}
+					atom = new Atom({x:0,y:ny,radius:2,destination:{x:canvas.width,y:ny}});
+					atom.start = {x:0,y:ny};
+					atom.end = {x:canvas.width,y:ny};
+					atom.to = atom.end;
+					atom.on('rest',function(){
+						if(this.to === this.start){
+							this.to = this.end;
+						}else if(this.to === this.end){
+							this.to = this.start;
+						}
+						this.set('destination',this.to);
+					});
+					line.addAtom(atom);
+				}
+
+				function addAtomY(nx){
+					if(line.atoms.length >= 400 ){return;}
+					atom = new Atom({x:nx,y:0,radius:2,destination:{x:nx,y:canvas.height}});
+					atom.start = {x:nx,y:0};
+					atom.end = {x:nx,y:canvas.height};
+					atom.to = atom.end;
+					atom.on('rest',function(){
+						if(this.to === this.start){
+							this.to = this.end;
+						}else if(this.to === this.end){
+							this.to = this.start;
+						}
+						this.set('destination',this.to);
+					});
+					line.addAtom(atom);
+				}
+
+				for(var i =1;i<=20;i++){
+					(function(i){
+						looper.add(100,function(){addAtomX(50*i);addAtomY(50*i)});	
+					})(i);
+				}
+				// looper.add(100,function(){addAtomX(50);addAtomY(50)});
+				// looper.add(100,function(){addAtomX(100);addAtomY(100)});
+				// looper.add(100,function(){addAtomX(150);addAtomY(150)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+				// looper.add(100,function(){addAtomX(200);addAtomY(200)});
+
+				looper.add(function(){
+					ctx.clearRect(0,0,canvas.width,canvas.height);
+					line.next();
+					line.renderTo(canvas);
+				});
+				looper.run();
+		});
+	</script>
+</html>
