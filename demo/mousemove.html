@@ -2,41 +2,42 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>mouse press</title>
+		<title>mouse move</title>
 	</head>
 	<script type="text/javascript" src="../sea.js"></script>
+	<script type="text/javascript" src="dest/trajectory.js"></script>
+	<body>
+		
+	</body>
 	<script type="text/javascript">
-		seajs.config({
-			paths:{
-				"trajectory":"./trajectory"
-			}
-		});
+
 		seajs.use([ "trajectory/atom",
-					"trajectory/motion",
+					"trajectory/line",
 					"trajectory/util/cpi",
 					"trajectory/util/looper",
 					"trajectory/util/random"
 					],
-			function(Atom,Motion,cpi,looper,random){
+			function(Atom,Line,cpi,looper,random){
 				var canvas = cpi.createCanvasFullScreen(),
-					motion = new Motion({canvas:canvas}),
+					ctx = canvas.getContext('2d'),
+					line = new Line(),
 					i=0,atoms = [];
-					console.log(canvas);
+
 				for(;i<2000;i++){
 					var atom = new Atom({x:random(0,canvas.width),y:random(0,canvas.height)});
 					atoms.push(atom);
 				}
-				motion.setAtoms(atoms);
-
+				// motion.setAtoms(atoms);
+				line.addAtom(atoms);
 				canvas.onmousemove=function(e){
-					motion.emit('mouseover',e.x,e.y);
+					line.emit('mouseover',e.x,e.y);
 				};
 				canvas.onmousedown = function(e){
-					motion.randomCoors();
+					line.random(0,0,canvas.width,canvas.height);
 				};
 
-				motion.on('mouseover',function(x,y){
-					var atoms = this.getAtoms();
+				line.on('mouseover',function(x,y){
+					var atoms = this.atoms;
 					for(var i = 0;i<atoms.length;i++){
 						atoms[i].set('vel',random(1,100));
 						atoms[i].set("destination",{x:x,y:y});
@@ -45,14 +46,13 @@
 
 				looper.add([
 					function(){
-						motion.ctx.clearRect(0,0,canvas.width,canvas.height);
+						ctx.clearRect(0,0,canvas.width,canvas.height);
 					},function(){
-						motion.next();
+						line.next();
+						line.renderTo(canvas);
 				}]);
 				looper.run();
 		});
 	</script>
-	<body>
-		
-	</body>
+	
 </html>

@@ -5,21 +5,19 @@
 		<title>mouse press</title>
 	</head>
 	<script type="text/javascript" src="../sea.js"></script>
+	<script type="text/javascript" src="dest/trajectory.js"></script>
 	<script type="text/javascript">
-		seajs.config({
-			paths:{
-				"trajectory":"./trajectory"
-			}
-		});
+	
 		seajs.use([ "trajectory/atom",
-					"trajectory/motion",
+					"trajectory/line",
 					"trajectory/util/cpi",
 					"trajectory/util/looper",
-					"trajectory/pattern/hello/hello_260_75_500"
+					"./dest/pattern/hello/hello_260_75_500"
 					],
-			function(Atom,Motion,cpi,looper,shape){
+			function(Atom,Line,cpi,looper,shape){
 				var canvas = cpi.createCanvasFullScreen(),
-					motion = new Motion({canvas:canvas}),
+					ctx = canvas.getContext('2d'),
+					line = new Line(),
 					i=0,mousedown=false,mouseCoor,rate=0;
 				shape.setOffset(canvas.width/2-shape.width/2,canvas.height/2-shape.height/2);
 				canvas.onmousedown=function(e){
@@ -35,7 +33,7 @@
 
 				function addAtom(){
 					if(i < shape.coors.length && mousedown){
-						motion.atoms.push(new Atom({x:mouseCoor.x,y:mouseCoor.y,destination:shape.coors[i],vel:30}));
+						line.atoms.push(new Atom({x:mouseCoor.x,y:mouseCoor.y,destination:shape.coors[i],vel:30}));
 						i++;
 					}
 				}
@@ -43,9 +41,10 @@
 				looper.add([
 					addAtom,
 					function(){
-						motion.ctx.clearRect(0,0,canvas.width,canvas.height);
+						ctx.clearRect(0,0,canvas.width,canvas.height);
 					},function(){
-						motion.next();
+						line.next();
+						line.renderTo(canvas);
 				}]);
 				looper.run();
 		});
