@@ -31,6 +31,10 @@ define(function(require,exports,module){
 			alpha = $('#configPanl .alpha').val();
 		// TODO 检测输入值
 		config.rgba = 'rgba(' + parseInt(hex.substr(1,2),16) + ',' + parseInt(hex.substr(3,2),16) + ',' + parseInt(hex.substr(5,2),16) + ',' + alpha + ')';
+		config.r = parseInt(hex.substr(1,2),16);
+		config.g = parseInt(hex.substr(3,2),16);
+		config.b = parseInt(hex.substr(5,2),16);
+		config.alpha = alpha;
 		config.radius = $('#configPanl .radius').val();
 		console.log(config);
 		return config;
@@ -59,7 +63,7 @@ define(function(require,exports,module){
 	});
 	$(canvas).on('mousedown',function(e){
 		var config = getConfig();
-		crtAtom = {x:e.clientX,y:e.clientY,radius:config.radius,rgba:config.rgba};
+		crtAtom = {x:e.clientX,y:e.clientY,radius:config.radius,rgba:config.rgba,r:config.r,g:config.g,b:config.b,alpha:config.alpha};
 		atoms.push(crtAtom);
 		draw();
 	});

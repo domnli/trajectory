@@ -76,16 +76,20 @@ define(function(require,exports,module){
 		var d = imageInfo.data,allAtoms = [],width = imageInfo.width,config = getConfig();
 		for(var i = 0;i<d.length;i+=4){
 			var total = d.length/4,
-				x,y,rgba;
+				x,y,rgba,r,g,b,alpha;
 			
 			x = i/4%width;
 			y = Math.floor(i/4/width);
+			r = d[i];
+			g = d[i+1];
+			b = d[i+2];
+			alpha = (d[i+3]/255).toFixed(2);
 			rgba = 'rgba('+d[i]+','+d[i+1]+','+d[i+2]+','+(d[i+3]/255).toFixed(2)+')';
 			if(config.rmin <= d[i] && d[i] <= config.rmax
 				&& config.gmin <= d[i+1] && d[i+1] <= config.gmax 
 				&& config.bmin <= d[i+2] && d[i+2] <= config.bmax 
 				&& config.amin <= d[i+3] && d[i+3] <= config.amax){
-				allAtoms.push({x:x,y:y,rgba:rgba});
+				allAtoms.push({x:x,y:y,rgba:rgba,r:r,g:g,b:b,alpha:alpha});
 			}
 		}
 		return allAtoms;
