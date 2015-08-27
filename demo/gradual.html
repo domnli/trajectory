@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>渐变</title>
+	<script type="text/javascript" src="../sea.js"></script>
+	<script type="text/javascript" src="dest/trajectory.js"></script>
+	</head>
+	<body>
+		
+	</body>
+	<script type="text/javascript">
+		seajs.use([ "trajectory/atom",
+					"trajectory/util/cpi",
+					"trajectory/util/random",
+					"trajectory/util/looper"
+					],
+			function(Atom,cpi,random,looper){
+				var canvas = cpi.createCanvasFullScreen(),
+					ctx = canvas.getContext('2d');
+				var atoms = [];
+				function radX(){
+					return random(0,canvas.width);
+				}
+				function radY(){
+					return random(0,canvas.height);
+				}
+				function rad255(){
+					return random(0,255);
+				}
+				function render(){
+					for(var i = 0;i<atoms.length;i++){
+						var atom = atoms[i];
+						cpi.drawSolidCircle(ctx,atom.get("x"),atom.get("y"),atom.get('radius'),atom.rgba());
+					}
+				}
+				function gradual(){
+					var i,j,removal = [];
+					for(i = 0;i<atoms.length;i++){
+						var atom = atoms[i],
+							radius = atom.get('radius'),
+							alpha = atom.get('alpha');
+						radius = radius + 2;
+						alpha = alpha - 0.01;
+						if(alpha <= 0){
+							removal.push(atom);
+						}
+						atom.set('radius',radius);
+						atom.set('alpha',alpha);
+					}
+					for(i = 0;i<removal.length;i++){
+						var index,atom = removal[i];
+						for(j = 0;j<atoms.length;j++){
+							if(atoms[j] === atom){
+								atoms.splice(j,1);
+								break;
+							}
+						}
+					}
+				}
+				function add(){
+					var atom = new Atom({x:radX(),y:radY(),r:rad255(),g:rad255(),b:rad255()});
+					atoms.push(atom);
+				}
+				
+				looper.add(100,add);
+
+				looper.add(10,gradual);
+
+				looper.add(function(){
+					ctx.clearRect(0,0,canvas.width,canvas.height);
+					render();
+				});
+				looper.run();
+		});
+	</script>
+</html>
