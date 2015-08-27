@@ -12,10 +12,6 @@
 define("trajectory/atom-debug", [ "./util/emitter-debug" ], function(require, exports, module) {
     var Emitter = require("./util/emitter-debug");
     function Atom(options) {
-        this._init(options);
-    }
-    Emitter(Atom.prototype);
-    Atom.prototype._init = function(options) {
         this.option = options;
         this._attr = {};
         this._attr.x = options.x || 0;
@@ -25,12 +21,17 @@ define("trajectory/atom-debug", [ "./util/emitter-debug" ], function(require, ex
             y: this.get("y")
         };
         this._attr.vel = options.vel || 1;
-        this._attr.rgba = options.rgba || "rgba(0,0,0,255)";
+        this._attr.rgba = options.rgba || "rgba(0,0,0,1)";
+        this._attr.r = options.r || 0;
+        this._attr.g = options.g || 0;
+        this._attr.b = options.b || 0;
+        this._attr.alpha = 1;
         this._attr.radius = options.radius || 1;
         this.on("destinationAlter", function() {
             this.rest = false;
         });
-    };
+    }
+    Emitter(Atom.prototype);
     Atom.prototype.get = function(p) {
         return this._attr[p];
     };
@@ -38,36 +39,10 @@ define("trajectory/atom-debug", [ "./util/emitter-debug" ], function(require, ex
         this._attr[p] = v;
         this.emit(p + "Alter");
     };
-    Atom.prototype.move = function() {
-        if (this.rest) {
-            return;
-        }
-        var px = this.get("x"), py = this.get("y"), dest = this.get("destination"), dx = dest.x - px, dy = dest.y - py, vel = this.get("vel"), distance, tx, ty;
-        distance = Math.sqrt(Math.pow(Math.abs(dx), 2) + Math.pow(Math.abs(dy), 2));
-        if (distance === 0) {
-            this.rest = true;
-            return;
-        }
-        tx = dx * vel / distance;
-        ty = dy * vel / distance;
-        if (Math.abs(tx) >= Math.abs(dx)) {
-            this._attr.x = dest.x;
-        } else {
-            this._attr.x += tx;
-        }
-        if (Math.abs(ty) >= Math.abs(dy)) {
-            this._attr.y = dest.y;
-        } else {
-            this._attr.y += ty;
-        }
-    };
-    Atom.prototype.moveTo = function(x, y) {
-        if (!isNaN(x)) {
-            this.set("x", x);
-        }
-        if (!isNaN(y)) {
-            this.set("y", y);
-        }
+    Atom.prototype.rgba = function() {
+        var rgba = "rgba(%r%,%g%,%b%,%alpha%)";
+        rgba = rgba.replace("%r%", this.get("r")).replace("%g%", this.get("g")).replace("%b%", this.get("b")).replace("%alpha%", this.get("alpha"));
+        return rgba;
     };
     module.exports = Atom;
 });
@@ -375,12 +350,36 @@ define("trajectory/line-debug", [ "./util/emitter-debug", "./util/renderer-debug
         for (;i < this.atoms.length; i++) {
             atom = this.atoms[i];
             if (!atom.rest) {
-                atom.move();
+                _next(atom);
                 rest = false;
             }
         }
         if (rest) {
             this.emit("rest");
+        }
+        function _next(atom) {
+            if (this.rest) {
+                return;
+            }
+            var px = atom.get("x"), py = atom.get("y"), dest = atom.get("destination"), dx = dest.x - px, dy = dest.y - py, vel = atom.get("vel"), distance, tx, ty;
+            distance = Math.sqrt(Math.pow(Math.abs(dx), 2) + Math.pow(Math.abs(dy), 2));
+            if (distance === 0) {
+                atom.rest = true;
+                atom.emit("rest");
+                return;
+            }
+            tx = dx * vel / distance;
+            ty = dy * vel / distance;
+            if (Math.abs(tx) >= Math.abs(dx)) {
+                atom._attr.x = dest.x;
+            } else {
+                atom._attr.x += tx;
+            }
+            if (Math.abs(ty) >= Math.abs(dy)) {
+                atom._attr.y = dest.y;
+            } else {
+                atom._attr.y += ty;
+            }
         }
     };
     /**
@@ -464,9 +463,8 @@ define("trajectory/shape-debug", [ "./util/emitter-debug", "./util/renderer-debu
 /**
 	图片转atom 工具
 */
-define("trajectory/util/image2atom-debug", [ "./cpi-debug", "./random-debug", "lib/jquery-debug" ], function(require, exports, module) {
-    console.log(jQuery);
-    var cpi = require("./cpi-debug"), random = require("./random-debug"), $ = jQuery || require("lib/jquery-debug"), canvas = cpi.createCanvasFullScreen(), ctx = canvas.getContext("2d"), img = new Image();
+define("trajectory/util/image2atom-debug", [ "./cpi-debug", "./random-debug" ], function(require, exports, module) {
+    var cpi = require("./cpi-debug"), random = require("./random-debug"), $ = jQuery, canvas = cpi.createCanvasFullScreen(), ctx = canvas.getContext("2d"), img = new Image();
     var imageInfo, allAtoms, atoms;
     img.onload = function() {
         ctx.drawImage(img, 0, 0);
@@ -516,15 +514,23 @@ define("trajectory/util/image2atom-debug", [ "./cpi-debug", "./random-debug", "l
     function collectAtomsWithRGBA(imageInfo) {
         var d = imageInfo.data, allAtoms = [], width = imageInfo.width, config = getConfig();
         for (var i = 0; i < d.length; i += 4) {
-            var total = d.length / 4, x, y, rgba;
+            var total = d.length / 4, x, y, rgba, r, g, b, alpha;
             x = i / 4 % width;
             y = Math.floor(i / 4 / width);
-            rgba = "rgba(" + d[i] + "," + d[i + 1] + "," + d[i + 2] + "," + d[i + 3] + ")";
+            r = d[i];
+            g = d[i + 1];
+            b = d[i + 2];
+            alpha = (d[i + 3] / 255).toFixed(2);
+            rgba = "rgba(" + d[i] + "," + d[i + 1] + "," + d[i + 2] + "," + (d[i + 3] / 255).toFixed(2) + ")";
             if (config.rmin <= d[i] && d[i] <= config.rmax && config.gmin <= d[i + 1] && d[i + 1] <= config.gmax && config.bmin <= d[i + 2] && d[i + 2] <= config.bmax && config.amin <= d[i + 3] && d[i + 3] <= config.amax) {
                 allAtoms.push({
                     x: x,
                     y: y,
-                    rgba: rgba
+                    rgba: rgba,
+                    r: r,
+                    g: g,
+                    b: b,
+                    alpha: alpha
                 });
             }
         }
@@ -669,4 +675,85 @@ define("trajectory/util/looper-debug", [], function(require, exports, module) {
     exports.add = addEvent;
     exports.remove = removeEvent;
     exports.stop = stop;
+});
+
+/**
+自定义图形转atom 工具
+*/
+define("trajectory/util/userdefined2atom-debug", [ "./cpi-debug" ], function(require, exports, module) {
+    var cpi = require("./cpi-debug"), $ = jQuery, canvas = cpi.createCanvasFullScreen(), ctx = canvas.getContext("2d");
+    var atoms = [], crtAtom;
+    (function() {
+        var tpl = '<div style=""><span style="display:block">颜色</span><input type="color"class="item rgb" /></div>' + '<div style=""><span style="display:block">透明</span><input type="input"  style="width:25px;" value="1" class="item alpha" /></div>' + '<div style=""><span style="display:block;margin-top:3px">半径</span><input type="input" style="width:25px;" value="3" class="item radius" /></div>';
+        var panl = document.createElement("div"), mask = document.createElement("div");
+        panl.id = "configPanl";
+        mask.id = "panlMask";
+        panl.style.cssText = "position: fixed; z-index:300; right:0; top:0; margin:50px; font-size:12px";
+        mask.style.cssText = "position: fixed; z-index:301; right:0; top:0; width:300px; height:0px; padding-top:300px; background-color:gray; opacity:0.5; display:none";
+        mask.innerHTML = "loading...";
+        panl.innerHTML = tpl;
+        document.body.appendChild(mask);
+        document.body.appendChild(panl);
+    })();
+    function getConfig() {
+        var config = {}, hex = $("#configPanl .rgb").val(), alpha = $("#configPanl .alpha").val();
+        // TODO 检测输入值
+        config.rgba = "rgba(" + parseInt(hex.substr(1, 2), 16) + "," + parseInt(hex.substr(3, 2), 16) + "," + parseInt(hex.substr(5, 2), 16) + "," + alpha + ")";
+        config.r = parseInt(hex.substr(1, 2), 16);
+        config.g = parseInt(hex.substr(3, 2), 16);
+        config.b = parseInt(hex.substr(5, 2), 16);
+        config.alpha = alpha;
+        config.radius = $("#configPanl .radius").val();
+        console.log(config);
+        return config;
+    }
+    canvas.oncontextmenu = function() {
+        return false;
+    };
+    $(document).on("keydown", function(e) {
+        switch (e.keyCode) {
+          case 38:
+            crtAtom.y -= 1;
+            break;
+
+          case 40:
+            crtAtom.y += 1;
+            break;
+
+          case 37:
+            crtAtom.x -= 1;
+            break;
+
+          case 39:
+            crtAtom.x += 1;
+            break;
+        }
+        draw();
+    });
+    $(document).on("keyup", function(e) {});
+    $(canvas).on("mousedown", function(e) {
+        var config = getConfig();
+        crtAtom = {
+            x: e.clientX,
+            y: e.clientY,
+            radius: config.radius,
+            rgba: config.rgba,
+            r: config.r,
+            g: config.g,
+            b: config.b,
+            alpha: config.alpha
+        };
+        atoms.push(crtAtom);
+        draw();
+    });
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < atoms.length; i++) {
+            var atom = atoms[i];
+            cpi.drawSolidCircle(ctx, atom.x, atom.y, atom.radius, atom.rgba);
+        }
+    }
+    exports.getAtoms = function() {
+        return atoms;
+    };
 });

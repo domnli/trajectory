@@ -49,7 +49,7 @@ define(function(require,exports,module){
 					.replace('%b%',this.get('b'))
 					.replace('%alpha%',this.get('alpha'));
 		return rgba;
-	}
+	};
 
 	module.exports =  Atom;
 });
