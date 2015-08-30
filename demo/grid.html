@@ -27,7 +27,7 @@
 				}
 
 				function addAtomX(ny){
-					if(line.atoms.length >= 400 ){return;}
+					if(line.atoms.length >= 1400 ){return;}
 					atom = new Atom({x:0,y:ny,radius:2,destination:{x:canvas.width,y:ny}});
 					atom.start = {x:0,y:ny};
 					atom.end = {x:canvas.width,y:ny};
@@ -44,7 +44,7 @@
 				}
 
 				function addAtomY(nx){
-					if(line.atoms.length >= 400 ){return;}
+					if(line.atoms.length >= 800 ){return;}
 					atom = new Atom({x:nx,y:0,radius:2,destination:{x:nx,y:canvas.height}});
 					atom.start = {x:nx,y:0};
 					atom.end = {x:nx,y:canvas.height};
@@ -60,7 +60,7 @@
 					line.addAtom(atom);
 				}
 
-				for(var i =1;i<=20;i++){
+				for(var i =1;i<=30;i++){
 					(function(i){
 						looper.add(100,function(){addAtomX(50*i);addAtomY(50*i)});	
 					})(i);
