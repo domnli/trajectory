@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>心跳</title>
+	<script type="text/javascript" src="../lib/sea.js"></script>
+	<!-- // <script type="text/javascript" src="../dest/trajectory.js"></script> -->
+	<script type="text/javascript" src="seajs_config.js"></script>
+	</head>
+	<body>
+		
+	</body>
+	<script type="text/javascript">
+		seajs.use(["trajectory/atom","trajectory/line","trajectory/util/cpi","trajectory/util/looper","trajectory/util/random"],
+			function(Atom,Line,cpi,looper,random){
+				var canvas = cpi.createCanvasFullScreen(),
+					ctx = canvas.getContext("2d"),
+					atom = new Atom({x:0,y:canvas.height/2,radius:3,destination:{x:canvas.width,y:canvas.height/2}}),
+					line = new Line({vel:3}),
+					minY = canvas.height/4,maxY = canvas.height/4*3,increaseX = 25,balanceY = canvas.height/2;
+
+				line.addAtom(atom);
+
+				var count = 5,times = 0;
+
+				atom.on('rest',function(){
+					if(this.get('destination').y === balanceY){
+						this.set('vel',3);
+						this.set('destination',{x:canvas.width,y:canvas.height/2});
+					}
+					if(this.get('x') === canvas.width){
+						this.set('x',0);
+						this.set('y',canvas.height/2);
+						ctx.clearRect(0,0,canvas.width,canvas.height);
+					}
+
+				});
+
+				function beat(){
+					atom.set('vel',25);
+					times++;
+					atom.set('destination',{x:atom.get('x')+increaseX,y:times%2?random(balanceY+1,maxY):random(minY,balanceY+1)});
+					if(times === count){
+						looper.remove(beat);
+						atom.set('destination',{x:atom.get('x')+increaseX,y:balanceY});
+						times = 0;
+					}
+				}
+
+				line.on('rest',function(){
+					
+				});
+
+				function render(){
+					// ctx.clearRect(0,0,canvas.width,canvas.height);
+					line.renderTo(canvas);
+				}
+				function move(){
+					line.next();	
+				}
+				looper.add(100,beat);
+				looper.add(2500,function(){
+					looper.add(150,beat);
+				});
+				looper.add(render);
+				looper.add(move);
+				looper.run();
+				window.looper = looper;
+				window.beat = beat;
+		});
+	</script>
+</html>
