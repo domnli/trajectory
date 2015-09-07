@@ -23,7 +23,9 @@ define(function(require,exports,module){
 		}
 
 		function add(atom,line){
-			if(!(atom instanceof Atom) && atom.x && atom.y){
+			if(!(atom instanceof Atom) 
+				&& typeof atom.x != 'undefined' 
+				&& typeof atom.y != 'undefined'){
 				atom = new Atom(atom);
 			}
 			atom.set('vel',line.vel);
