@@ -2,14 +2,14 @@
  * Created by domnli on 16/4/1.
  */
 (function(trajectory){
-    var canvas = trajectory.createCanvas();
-    trajectory.Stage = Stage;
+
+    trajectory.inheritance.Stage = Stage;
 
     function Stage(obj){
-        if(obj){return trajectory.mixin(obj)};
+        if(obj) return trajectory.mixin(obj,Stage);
 
-        this.canvas = canvas;
-        this.ctx = canvas.getContext("2d");
+        this.canvas = trajectory.createCanvas();;
+        this.ctx = this.canvas.getContext("2d");
         this.atoms = [];
     }
 
@@ -17,7 +17,7 @@
         if(this.atoms){
             for(var i = 0;i<this.atoms.length;i++){
                 var atom = this.atoms[i];
-                trajectory.drawSolidCircle(ctx,atom.get("x"),atom.get("y"),atom.get('radius'),atom.get('rgba'));
+                trajectory.drawSolidCircle(this.ctx,atom.x,atom.y,atom.radius,atom.getRGBA());
             }
         }
     }

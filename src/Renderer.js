@@ -2,10 +2,10 @@
  * Created by domnli on 16/4/1.
  */
 (function(trajectory){
-    trajectory.Renderer = Renderer;
+    trajectory.inheritance.Renderer = Renderer;
 
     function Renderer(obj){
-        if(obj){return trajectory.mixin(obj)};
+        if(obj) return trajectory.mixin(obj,Renderer);
     }
 
     Renderer.prototype.renderTo = function(canvas){

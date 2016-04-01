@@ -5,6 +5,7 @@
 
     var document = window.document,
         trajectory = window.trajectory||(window.trajectory = {});
+    trajectory.inheritance = {};
 
     trajectory.random = random;
     trajectory.mixin = mixin;
